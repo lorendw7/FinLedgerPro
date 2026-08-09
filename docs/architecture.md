@@ -58,6 +58,7 @@ Each module owns a real-world process and knows how to express it as journal ent
 
 | Module | Responsibility |
 |--------|----------------|
+| **Personal Ledger** | Personal accounts, categories, income/expense/transfer, budgets, spending analysis — its own `PERSONAL` book |
 | Revenue & Invoicing | Contracts, invoices, AR, receipts, revenue recognition |
 | Expense & Payables | Purchases/expenses, AP, payments, reimbursements |
 | Payroll · piece-rate | Employment types × pay methods, output records, settlements, tax withholding |
@@ -69,6 +70,7 @@ Each module owns a real-world process and knows how to express it as journal ent
 
 The part that must be **correct above all else** and **change as rarely as possible**:
 
+- **Books** — each set of books (`PERSONAL`, and one per business entity) is isolated; only business books consolidate.
 - **Chart of Accounts** — the tree of accounts every entry is posted against.
 - **General Ledger / Journal** — the immutable book of record.
 - **Double-entry posting** — validates `debits == credits` before commit; rejects unbalanced entries.
@@ -94,6 +96,7 @@ Every domain below is "just another subledger" that posts to the kernel. Priorit
 
 | Domain | Subledger module | Priority for this business |
 |--------|------------------|----------------------------|
+| **Personal finance** | **Personal ledger — accounts, categories, transactions, budgets, spending analysis** | 🔴 **Highest — built first** (see [Section 5.1](#51-the-personal-ledger-separate-book-highest-priority)) |
 | Expenditure cycle (P2P) | Expense/purchase, AP, payments, reimbursement | 🔴 High — pays annotators |
 | Payroll | Employment-type × pay-method, output, settlement, tax | 🔴 High — 劳务 + piece-rate core |
 | Revenue cycle (O2C) | Contract, invoice, AR, receipt, revenue recognition | 🔴 High — bills clients |
@@ -102,6 +105,40 @@ Every domain below is "just another subledger" that posts to the kernel. Priorit
 | Fixed assets | Asset register, depreciation | 🟢 Low |
 | Tax | Tax payable, VAT/GST, tax-knowledge RAG (reference) | 🟢 Low — start with lookup |
 | Reporting & analysis | 3 statements, dashboards, AI, export | 🟠 Medium |
+
+### 5.1 The personal ledger: separate book, highest priority
+
+The personal ledger is the **first module built**, for two reasons: the owner has an immediate, concrete need (personal spending needs visibility and control), and it is the ideal **walking skeleton** — it exercises accounts, `Decimal` money, transactions, and reporting end to end without any business-domain complexity.
+
+Architecturally it demonstrates why the narrow waist works: **it required no change to the kernel.** The `entity_id` / `book_id` extension point (§6.3) already anticipated multiple sets of books, so the personal ledger is simply another book.
+
+**Separation is mandatory (entity assumption).** The owner and the company are distinct accounting entities; their books never merge. `book_type` distinguishes them:
+
+| | `PERSONAL` | `BUSINESS` |
+|---|---|---|
+| Basis | Cash basis — recorded when money moves | Accrual basis |
+| Method | Single-entry (cash-flow style) | Double-entry |
+| Consolidation | **Never** consolidated with business books | Consolidated across SG + CN entities |
+
+Money crossing the boundary is modelled explicitly, never as an expense in the wrong book:
+
+| Situation | Correct treatment |
+|-----------|-------------------|
+| Company account pays a personal expense | Dr **Other receivable — shareholder** (loan to owner), not a company expense |
+| Owner's own money pays a company cost | Cr **Other payable — shareholder** |
+| Owner takes money out of the company | **Owner's draw / dividend / salary**, with an explicit nature |
+
+**Three transaction kinds — `TRANSFER` is not spending.** The most common personal-bookkeeping error is counting a *movement* of money as *spending*:
+
+- `INCOME` — money enters personal net worth.
+- `EXPENSE` — money leaves personal net worth. **Only this counts toward spending totals and budgets.**
+- `TRANSFER` — money moves between the user's own accounts (bank → e-wallet, or a **credit-card repayment**). Net worth is unchanged, so it is **excluded from all spending statistics**.
+
+Credit cards are **liability accounts**: swiping is an expense *and* increases the liability; repayment is a `TRANSFER`. Counting both as expenses would double-count every card purchase.
+
+**Balances are derived, never stored** — `opening_balance + Σ inflows − Σ outflows`. A stored, mutable balance drifts out of sync with the transactions; the transaction history is the single source of truth.
+
+The full data-model blueprint and the spending-control feature set (fast capture, need-vs-want tagging, budgets with alerts, recurring-subscription detection, savings rate) are documented in the [README](../README.md#personal-ledger-priority-module).
 
 ---
 
@@ -133,7 +170,8 @@ Every business event is a **source document** that *generates* a voucher (rather
 Build the smallest closed loop first, then widen — tailored to the project's real operations:
 
 ```
-Kernel (Phase 0–1)
+Kernel (Phase 0)
+   → PERSONAL LEDGER                    (see where personal money goes)  ← first
    → Expenditure + Payroll piece-rate   (pay the annotators)
    → Revenue / Invoicing                (collect from clients)
    → Bank & Cash reconciliation         (reconcile cash)
@@ -142,7 +180,7 @@ Kernel (Phase 0–1)
    → Tax / AI
 ```
 
-The minimum viable closed loop is: **pay an annotator → post to the ledger → see it in a report.** Everything else is incremental.
+The first closed loop is the personal one: **record a spend → see it categorised → see it against a budget.** The business loop follows: **pay an annotator → post to the ledger → see it in a report.** Everything else is incremental.
 
 ---
 

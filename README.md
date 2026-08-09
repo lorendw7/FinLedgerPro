@@ -23,6 +23,7 @@
 - [Key Features](#key-features)
 - [Technical Architecture](#technical-architecture)
 - [AI Workflow (LangGraph)](#ai-workflow-langgraph)
+- [Personal Ledger (Priority Module)](#personal-ledger-priority-module)
 - [The Six Accounting Modules](#the-six-accounting-modules)
 - [Single-Entry vs Double-Entry Bookkeeping](#single-entry-vs-double-entry-bookkeeping)
 - [Dual-Currency & Dual-Market Support](#dual-currency--dual-market-support)
@@ -100,6 +101,7 @@ Founders operating simultaneously in Singapore and China face a specific set of 
 
 ## Key Features
 
+- **Personal ledger (priority module)** — fast daily expense capture, budgets, and spending analysis in a book kept strictly separate from the business books.
 - **Dual bookkeeping modes** — switch freely between single-entry (cash-flow style) and double-entry (debit/credit, GAAP-aligned) bookkeeping.
 - **Dual-currency input & consolidation** — record in SGD or CNY; the system auto-converts to a unified reference currency (SGD) for summary reporting.
 - **Six accounting modules** — covering the full operational chain from revenue recognition to fixed-asset depreciation (see below).
@@ -162,6 +164,82 @@ When the user triggers an analysis, the request flows through a sequence of Lang
 5. **Forecast node** — project cash flow for the next 30 / 60 / 90 days.
 6. **Advice-generation node** — local Ollama inference produces bilingual (EN/ZH) recommendations.
 7. **Tax-RAG node (supporting)** — vector-retrieve relevant tax provisions and return cited references.
+
+---
+
+## Personal Ledger (Priority Module)
+
+**Built first.** Before any business module, FinLedger Pro ships a personal bookkeeping ledger — the owner's day-to-day money needs visibility and control now, and this module doubles as the walking skeleton that proves the kernel (accounts, `Decimal` money, transactions, reports) end to end.
+
+### Strict separation: personal ≠ business
+
+Under the **entity assumption**, the owner and the company are two distinct accounting entities whose books must never merge. The system enforces this with two separate books:
+
+| | `book_type = PERSONAL` | `book_type = BUSINESS` |
+|---|---|---|
+| **Basis** | Cash basis (收付实现制) — recorded when money actually moves | Accrual basis (权责发生制) |
+| **Method** | Single-entry (cash-flow style) | Double-entry (debit/credit) |
+| **Question it answers** | Where is my money going? Can I spend less? | Is the company profitable? |
+| **Consolidation** | **Never consolidated with business books** | Consolidated across SG + CN entities |
+
+Cross-boundary money is modelled explicitly, never as an expense in the wrong book:
+
+| Situation | Correct treatment |
+|-----------|-------------------|
+| Company account pays a personal expense | Dr **Other receivable — shareholder** (a loan to the owner), not a company expense |
+| Owner's own money pays a company cost | Cr **Other payable — shareholder** (company owes the owner) |
+| Owner takes money out of the company | Recorded as **owner's draw / dividend / salary** with an explicit nature |
+
+### Three transaction kinds — `TRANSFER` is not spending
+
+The single most common personal-bookkeeping error is counting a *movement* of money as *spending*. The model therefore has three distinct kinds:
+
+- **`INCOME`** — money enters the personal net worth.
+- **`EXPENSE`** — money leaves the personal net worth. **Only this counts toward spending totals and budgets.**
+- **`TRANSFER`** — money moves between the user's own accounts (bank → e-wallet, or a **credit-card repayment**). Net worth is unchanged, so it is **excluded from all spending statistics**.
+
+Credit cards are modelled as **liability accounts**: swiping the card is an expense *and* increases the liability; repaying the card is a **transfer**. Treating both as expenses would double-count every card purchase.
+
+### Spending-control features
+
+Recording alone does not reduce spending — it only creates visibility. These features supply the actual levers:
+
+- **Fast capture** — the primary screen is "add a transaction", with smart defaults (today's date, last-used account, most-recent categories). *Entry speed is the single biggest factor in whether bookkeeping is sustained; anything over ~10 seconds gets abandoned.*
+- **Hierarchical categories** — e.g. Food → Takeaway, Transport → Ride-hailing.
+- **Need vs Want tagging** — every expense is flagged `NEED` or `WANT`, enabling 50/30/20-style analysis (50% needs, 30% wants, 20% savings).
+- **Monthly budgets with alerts** — per category and overall, with a warning threshold (e.g. 80% consumed).
+- **Recurring-subscription detection** — surfaces silent auto-renewing charges (memberships, cloud storage, software), the most commonly overlooked drain.
+- **Where-did-it-go analysis** — top categories, largest single expenses, month-over-month comparison, and **savings rate** = (income − expense) / income.
+
+### Data model (blueprint)
+
+```
+book                    # 账套 — personal and business are separate books
+  id, name, book_type = PERSONAL | BUSINESS, base_currency
+
+account                 # 资金账户
+  id, book_id, name
+  account_kind = CASH | BANK | EWALLET | CREDIT_CARD    # card = liability
+  currency, opening_balance (Decimal), is_active
+
+category                # 收支分类, hierarchical
+  id, book_id, name, kind = INCOME | EXPENSE, parent_id
+
+transaction             # 流水 — the heart of the module
+  id, book_id, txn_date
+  kind = INCOME | EXPENSE | TRANSFER
+  account_id, to_account_id (TRANSFER only)
+  category_id, amount (Decimal), currency, fx_rate (Decimal)
+  need_or_want = NEED | WANT (EXPENSE only)
+  merchant, note, tags, attachment, is_recurring
+  created_at
+
+budget                  # 预算
+  id, book_id, period (YYYY-MM), category_id (null = overall)
+  limit_amount (Decimal), alert_threshold
+```
+
+**Balances are derived, never stored.** An account's balance is computed as `opening_balance + Σ inflows − Σ outflows`. A stored, mutable balance field inevitably drifts out of sync with the transactions and becomes untrustworthy — the transaction history is the single source of truth.
 
 ---
 
@@ -258,13 +336,13 @@ All statements export to **Excel (.xlsx)** and **PDF** for sharing with accounta
 
 ## Development Roadmap
 
-The project is built as a sequence of phases over roughly seven weeks. **Phase 0 builds a thin end-to-end "walking skeleton" first**, then later phases widen it. Tests, linting, and CI are set up in Phase 0 and maintained continuously — not bolted on at the end. Treat this as the path to a usable **v0.1**, with full payroll and the AI engine as stretch goals rather than guaranteed completions.
+The project is built as a sequence of phases over roughly seven weeks. **Phase 0 builds a thin end-to-end "walking skeleton" first**, then later phases widen it. The [personal ledger](#personal-ledger-priority-module) is the first real module — it delivers immediate value to the owner and exercises the whole stack before any business complexity is added. Tests, linting, and CI are set up in Phase 0 and maintained continuously — not bolted on at the end. Treat this as the path to a usable **v0.1**, with full payroll and the AI engine as stretch goals rather than guaranteed completions.
 
 | Phase | Timeline | Deliverable |
 |-------|----------|-------------|
 | **Phase 0** | Week 1 (first half) | 🆕 Walking skeleton: record one transaction end-to-end (Electron → FastAPI → SQLite → React list) + test / lint / CI scaffolding |
-| **Phase 1** | Weeks 1–2 | Accounting core: **chart of accounts**, vouchers/journal, double-entry posting with **balance validation**, **trial balance**, single/double-entry switching, `Decimal` money — with unit & property tests written alongside. Plus a minimal **automatic backup**. |
-| **Phase 2** | Week 3 | Backend APIs for the six modules, ordered by value: revenue / cost / AR / AP first, then assets, then payroll (**Singapore CPF first, China later**) |
+| **Phase 1** | Weeks 1–2 | 🔴 **Personal ledger first** — books, accounts, categories, transactions (`INCOME` / `EXPENSE` / `TRANSFER`), fast capture, budgets & alerts, spending analysis, `Decimal` money, derived balances. **Then** the accounting core: **chart of accounts**, vouchers/journal, double-entry posting with **balance validation**, **trial balance**, single/double-entry switching — with unit & property tests written alongside. Plus a minimal **automatic backup**. |
+| **Phase 2** | Week 3 | Backend APIs for the six business modules, ordered by value: revenue / cost / AR / AP first, then assets, then payroll (**Singapore CPF first, China later**) |
 | **Phase 3** | Week 4 | React frontend build-out + Electron desktop packaging |
 | **Phase 4** | Week 5 | Automatic three-statement generation (built on the trial balance) + Excel/PDF export |
 | **Phase 5** | Week 6 | Ollama integration + LangGraph AI analysis engine (minimal, supporting) |
