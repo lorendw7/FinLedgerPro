@@ -1,6 +1,6 @@
 <svg viewBox="0 0 900 706" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
-  <title>FinLedger Pro narrow-waist extensible architecture</title>
-  <desc>A personal ledger book and six business subledger modules both post journal entries down into a central accounting kernel (chart of accounts, general ledger, double-entry posting, trial balance), which the reporting and analysis layer reads from. The personal book is never consolidated with the business books. A platform band of cross-cutting capabilities wraps everything.</desc>
+  <title>FinLedger Pro narrow-waist architecture with Basic and Pro tiers</title>
+  <desc>The Basic tier personal ledger and the Pro tier business subledger modules both sit above a shared accounting kernel that holds books, chart of accounts, general ledger, double-entry posting and trial balance. The reporting and analysis layer reads from the kernel. Basic and Pro may each depend on the kernel but never on each other. A platform band of cross-cutting capabilities wraps everything. Both tiers are free and MIT licensed.</desc>
 
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
@@ -10,94 +10,111 @@
 
   <rect x="0" y="0" width="900" height="706" fill="#FBFBF9"/>
 
-  <text x="450" y="26" text-anchor="middle" font-size="17" font-weight="700" fill="#2C2C2A">FinLedger Pro &#8212; Extensible &#8220;Narrow-Waist&#8221; Design</text>
+  <text x="450" y="24" text-anchor="middle" font-size="17" font-weight="700" fill="#2C2C2A">FinLedger Pro &#8212; Narrow-Waist Architecture &#183; Basic + Pro tiers</text>
+  <text x="450" y="42" text-anchor="middle" font-size="11" fill="#5F5E5A">Both tiers are free and MIT-licensed &#8212; the boundary is progressive disclosure, not a paywall</text>
 
-  <!-- TIER 1a: personal book -->
-  <text x="450" y="54" text-anchor="middle" font-size="12" font-weight="700" fill="#3B6D11">PERSONAL BOOK &#183; &#20010;&#20154;&#36134;&#22871; &#8212; built first &#183; never consolidated with business</text>
-  <rect x="40" y="62" width="820" height="48" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="2"/>
-  <text x="450" y="82"  text-anchor="middle" font-size="13" font-weight="700" fill="#3B6D11">Personal Ledger &#183; &#20010;&#20154;&#35760;&#36134;</text>
-  <text x="450" y="99"  text-anchor="middle" font-size="11" fill="#3B6D11">accounts &#183; categories &#183; income / expense / transfer &#183; budgets &#183; spending analysis</text>
+  <!-- TIER: BASIC -->
+  <text x="240" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#3B6D11">&#128994; BASIC &#183; &#20010;&#20154;&#35760;&#36134; &#8212; ships first</text>
+  <rect x="40" y="76" width="400" height="170" rx="10" fill="#EAF3DE" stroke="#639922" stroke-width="2"/>
+  <text x="240" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#3B6D11">Personal Ledger &#183; PERSONAL book</text>
+  <text x="240" y="115" text-anchor="middle" font-size="11" fill="#3B6D11">cash basis &#183; single-entry &#183; no accounting knowledge needed</text>
 
-  <!-- TIER 1b: business modules -->
-  <text x="450" y="134" text-anchor="middle" font-size="12" font-weight="700" fill="#5F5E5A">BUSINESS MODULES &#183; &#19994;&#21153;&#23376;&#36134; &#8212; they POST journal entries</text>
+  <rect x="60"  y="128" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#97C459" stroke-width="1.2"/>
+  <text x="147" y="146" text-anchor="middle" font-size="11" fill="#3B6D11">Accounts &amp; Categories</text>
+  <text x="147" y="161" text-anchor="middle" font-size="10" fill="#639922">&#36134;&#25143; &#183; &#20998;&#31867;</text>
 
-  <!-- row a -->
-  <g>
-    <rect x="40"  y="144" width="240" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="160" y="164" text-anchor="middle" font-size="13" fill="#444441">Revenue &amp; Invoicing</text>
-    <text x="160" y="181" text-anchor="middle" font-size="11" fill="#5F5E5A">&#25910;&#20837; &#183; &#24320;&#31080;</text>
+  <rect x="245" y="128" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#97C459" stroke-width="1.2"/>
+  <text x="332" y="146" text-anchor="middle" font-size="11" fill="#3B6D11">Income / Expense / Transfer</text>
+  <text x="332" y="161" text-anchor="middle" font-size="10" fill="#639922">&#27969;&#27700; &#8212; transfer &#8800; spending</text>
 
-    <rect x="330" y="144" width="240" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="450" y="164" text-anchor="middle" font-size="13" fill="#444441">Expense &amp; Payables</text>
-    <text x="450" y="181" text-anchor="middle" font-size="11" fill="#5F5E5A">&#25903;&#20986; &#183; &#24212;&#20184;</text>
+  <rect x="60"  y="180" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#97C459" stroke-width="1.2"/>
+  <text x="147" y="198" text-anchor="middle" font-size="11" fill="#3B6D11">Budgets &amp; Alerts</text>
+  <text x="147" y="213" text-anchor="middle" font-size="10" fill="#639922">&#39044;&#31639; &#183; need / want</text>
 
-    <rect x="620" y="144" width="240" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="740" y="164" text-anchor="middle" font-size="13" fill="#444441">Payroll &#183; piece-rate</text>
-    <text x="740" y="181" text-anchor="middle" font-size="11" fill="#5F5E5A">&#34218;&#37228; &#183; &#21171;&#21153;&#35745;&#20214;</text>
-  </g>
-  <!-- row b -->
-  <g>
-    <rect x="40"  y="198" width="240" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="160" y="218" text-anchor="middle" font-size="13" fill="#444441">Cost &amp; Inventory</text>
-    <text x="160" y="235" text-anchor="middle" font-size="11" fill="#5F5E5A">&#25104;&#26412; &#183; &#23384;&#36135;</text>
+  <rect x="245" y="180" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#97C459" stroke-width="1.2"/>
+  <text x="332" y="198" text-anchor="middle" font-size="11" fill="#3B6D11">Spending Analysis</text>
+  <text x="332" y="213" text-anchor="middle" font-size="10" fill="#639922">&#25903;&#20986;&#20998;&#26512; &#183; savings rate</text>
 
-    <rect x="330" y="198" width="240" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="450" y="218" text-anchor="middle" font-size="13" fill="#444441">Fixed Assets</text>
-    <text x="450" y="235" text-anchor="middle" font-size="11" fill="#5F5E5A">&#22266;&#23450;&#36164;&#20135; &#183; &#25240;&#26087;</text>
+  <text x="240" y="239" text-anchor="middle" font-size="10" font-style="italic" fill="#639922">complete on its own &#8212; not a trial version</text>
 
-    <rect x="620" y="198" width="240" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="740" y="218" text-anchor="middle" font-size="13" fill="#444441">Bank &amp; Cash</text>
-    <text x="740" y="235" text-anchor="middle" font-size="11" fill="#5F5E5A">&#36164;&#37329; &#183; &#23545;&#36134;</text>
-  </g>
+  <!-- TIER: PRO -->
+  <text x="670" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#0C447C">&#128309; PRO &#183; &#20844;&#21496;&#35760;&#36134; &#8212; opt-in toggle</text>
+  <rect x="460" y="76" width="400" height="170" rx="10" fill="#E6F1FB" stroke="#378ADD" stroke-width="2"/>
+  <text x="660" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#0C447C">Business Subledgers &#183; BUSINESS books</text>
+  <text x="660" y="115" text-anchor="middle" font-size="11" fill="#185FA5">accrual basis &#183; double-entry &#183; they POST journal entries</text>
 
-  <!-- arrow down to core -->
-  <line x1="450" y1="250" x2="450" y2="286" stroke="#6E6D67" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="468" y="272" font-size="11" font-style="italic" fill="#5F5E5A">post &#20511;/&#36151; entries</text>
+  <rect x="480" y="128" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#85B7EB" stroke-width="1.2"/>
+  <text x="567" y="146" text-anchor="middle" font-size="11" fill="#0C447C">Revenue &#183; Cost</text>
+  <text x="567" y="161" text-anchor="middle" font-size="10" fill="#378ADD">&#25910;&#20837; &#183; &#25104;&#26412;</text>
+
+  <rect x="665" y="128" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#85B7EB" stroke-width="1.2"/>
+  <text x="752" y="146" text-anchor="middle" font-size="11" fill="#0C447C">AR / AP &#183; Bank</text>
+  <text x="752" y="161" text-anchor="middle" font-size="10" fill="#378ADD">&#24212;&#25910;&#24212;&#20184; &#183; &#36164;&#37329;</text>
+
+  <rect x="480" y="180" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#85B7EB" stroke-width="1.2"/>
+  <text x="567" y="198" text-anchor="middle" font-size="11" fill="#0C447C">Payroll &#183; piece-rate</text>
+  <text x="567" y="213" text-anchor="middle" font-size="10" fill="#378ADD">CPF &#183; &#20116;&#38505;&#19968;&#37329; &#183; &#35745;&#20214;</text>
+
+  <rect x="665" y="180" width="175" height="42" rx="6" fill="#FBFBF9" stroke="#85B7EB" stroke-width="1.2"/>
+  <text x="752" y="198" text-anchor="middle" font-size="11" fill="#0C447C">Fixed Assets &#183; Tax</text>
+  <text x="752" y="213" text-anchor="middle" font-size="10" fill="#378ADD">&#22266;&#23450;&#36164;&#20135; &#183; &#31246;&#21153;</text>
+
+  <text x="660" y="239" text-anchor="middle" font-size="10" font-style="italic" fill="#378ADD">free &#8212; a settings toggle, not a purchase</text>
+
+  <!-- no-cross-dependency marker -->
+  <line x1="450" y1="86" x2="450" y2="238" stroke="#B4B2A9" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="404" y="150" width="92" height="18" rx="4" fill="#FBFBF9"/>
+  <text x="450" y="163" text-anchor="middle" font-size="9.5" fill="#888780">no dependency</text>
+
+  <!-- arrows down to core -->
+  <line x1="240" y1="246" x2="330" y2="288" stroke="#6E6D67" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="660" y1="246" x2="570" y2="288" stroke="#6E6D67" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="450" y="268" text-anchor="middle" font-size="11" font-style="italic" fill="#5F5E5A">both depend on the kernel</text>
 
   <!-- CORE (the waist) -->
-  <rect x="150" y="292" width="600" height="118" rx="10" fill="#E6F1FB" stroke="#378ADD" stroke-width="2.5"/>
-  <text x="450" y="318" text-anchor="middle" font-size="15" font-weight="700" fill="#0C447C">ACCOUNTING KERNEL &#183; &#20250;&#35745;&#20869;&#26680;  (the narrow waist)</text>
-  <text x="450" y="342" text-anchor="middle" font-size="12" fill="#185FA5">Books &#183; Chart of Accounts &#183; General Ledger &#183; Double-entry posting (&#20511; = &#36151;) &#183; Trial Balance</text>
-  <rect x="172" y="362" width="556" height="34" rx="6" fill="#B5D4F4"/>
-  <text x="450" y="384" text-anchor="middle" font-size="11" fill="#0C447C">SQLite local file &#183; Decimal money &#183; immutable audit trail &#183; ACID transactions</text>
+  <rect x="150" y="294" width="600" height="112" rx="10" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="2.5"/>
+  <text x="450" y="318" text-anchor="middle" font-size="15" font-weight="700" fill="#2C2C2A">core/ &#8212; SHARED ACCOUNTING KERNEL &#183; &#20250;&#35745;&#20869;&#26680;  (the narrow waist)</text>
+  <text x="450" y="340" text-anchor="middle" font-size="12" fill="#444441">Books &#183; Accounts &#183; Chart of Accounts &#183; General Ledger &#183; Posting (&#20511; = &#36151;) &#183; Trial Balance</text>
+  <rect x="172" y="356" width="556" height="34" rx="6" fill="#D3D1C7"/>
+  <text x="450" y="378" text-anchor="middle" font-size="11" fill="#2C2C2A">SQLite local file &#183; Decimal money &#183; immutable audit trail &#183; ACID transactions</text>
 
   <!-- arrow down to reports -->
-  <line x1="450" y1="410" x2="450" y2="446" stroke="#6E6D67" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="468" y="432" font-size="11" font-style="italic" fill="#5F5E5A">read ledger</text>
+  <line x1="450" y1="406" x2="450" y2="442" stroke="#6E6D67" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="468" y="428" font-size="11" font-style="italic" fill="#5F5E5A">read</text>
 
   <!-- TIER 3: reporting -->
-  <text x="450" y="466" text-anchor="middle" font-size="12" font-weight="700" fill="#5F5E5A">REPORTING &amp; ANALYSIS &#183; &#25253;&#34920;&#20998;&#26512; &#8212; they READ the ledger</text>
+  <text x="450" y="462" text-anchor="middle" font-size="12" font-weight="700" fill="#5F5E5A">REPORTING &amp; ANALYSIS &#183; &#25253;&#34920;&#20998;&#26512; &#8212; they READ the ledger</text>
   <g>
-    <rect x="40"  y="476" width="190" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="135" y="496" text-anchor="middle" font-size="13" fill="#444441">3 Statements</text>
-    <text x="135" y="513" text-anchor="middle" font-size="11" fill="#5F5E5A">&#19977;&#22823;&#25253;&#34920;</text>
+    <rect x="40"  y="472" width="190" height="48" rx="8" fill="#EAF3DE" stroke="#639922" stroke-width="1.5"/>
+    <text x="135" y="492" text-anchor="middle" font-size="12" fill="#3B6D11">Spending &#183; Budget</text>
+    <text x="135" y="509" text-anchor="middle" font-size="10" fill="#639922">&#128994; Basic &#183; CSV</text>
 
-    <rect x="250" y="476" width="190" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="345" y="496" text-anchor="middle" font-size="13" fill="#444441">Dashboards / KPIs</text>
-    <text x="345" y="513" text-anchor="middle" font-size="11" fill="#5F5E5A">&#32463;&#33829;&#30475;&#26495;</text>
+    <rect x="250" y="472" width="190" height="48" rx="8" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+    <text x="345" y="492" text-anchor="middle" font-size="12" fill="#0C447C">3 Statements</text>
+    <text x="345" y="509" text-anchor="middle" font-size="10" fill="#378ADD">&#128309; Pro &#183; Excel / PDF</text>
 
-    <rect x="460" y="476" width="190" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="555" y="496" text-anchor="middle" font-size="13" fill="#444441">AI Analysis</text>
-    <text x="555" y="513" text-anchor="middle" font-size="11" fill="#5F5E5A">AI &#20998;&#26512; (LangGraph)</text>
+    <rect x="460" y="472" width="190" height="48" rx="8" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.5"/>
+    <text x="555" y="492" text-anchor="middle" font-size="12" fill="#0C447C">Dashboards / KPIs</text>
+    <text x="555" y="509" text-anchor="middle" font-size="10" fill="#378ADD">&#128309; Pro &#183; &#32463;&#33829;&#30475;&#26495;</text>
 
-    <rect x="670" y="476" width="190" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-    <text x="765" y="496" text-anchor="middle" font-size="13" fill="#444441">Export</text>
-    <text x="765" y="513" text-anchor="middle" font-size="11" fill="#5F5E5A">Excel &#183; PDF &#23548;&#20986;</text>
+    <rect x="670" y="472" width="190" height="48" rx="8" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
+    <text x="765" y="492" text-anchor="middle" font-size="12" fill="#444441">AI Analysis</text>
+    <text x="765" y="509" text-anchor="middle" font-size="10" fill="#5F5E5A">both tiers &#183; LangGraph</text>
   </g>
 
   <!-- PLATFORM band -->
-  <text x="450" y="556" text-anchor="middle" font-size="12" font-weight="700" fill="#5F5E5A">PLATFORM (cross-cutting) &#183; &#24179;&#21488;&#27178;&#20999;&#33021;&#21147;</text>
-  <rect x="40" y="566" width="820" height="64" rx="8" fill="#D3D1C7" stroke="#B4B2A9" stroke-width="1.5"/>
-  <text x="450" y="590" text-anchor="middle" font-size="12" fill="#2C2C2A">Multi-book &amp; multi-entity (personal / SG / CN) &#183; Multi-currency &#183; Tax config (&#20165;&#21442;&#32771;)</text>
-  <text x="450" y="612" text-anchor="middle" font-size="12" fill="#2C2C2A">Backup &amp; restore &#183; Security / encryption &#183; Import/Export &#183; Configurable rates</text>
+  <text x="450" y="552" text-anchor="middle" font-size="12" font-weight="700" fill="#5F5E5A">PLATFORM (cross-cutting) &#183; &#24179;&#21488;&#27178;&#20999;&#33021;&#21147;</text>
+  <rect x="40" y="562" width="820" height="64" rx="8" fill="#D3D1C7" stroke="#B4B2A9" stroke-width="1.5"/>
+  <text x="450" y="586" text-anchor="middle" font-size="12" fill="#2C2C2A">Multi-book &amp; multi-entity (personal / SG / CN) &#183; Multi-currency &#183; Tax config (&#20165;&#21442;&#32771;)</text>
+  <text x="450" y="608" text-anchor="middle" font-size="12" fill="#2C2C2A">Backup &amp; restore &#183; Security / encryption &#183; Import/Export &#183; Configurable rates</text>
 
   <!-- legend -->
-  <rect x="120" y="656" width="16" height="16" rx="3" fill="#EAF3DE" stroke="#639922" stroke-width="2"/>
-  <text x="144" y="669" font-size="11" fill="#5F5E5A">Personal book &#8212; separate, built first</text>
+  <rect x="150" y="652" width="16" height="16" rx="3" fill="#EAF3DE" stroke="#639922" stroke-width="2"/>
+  <text x="174" y="665" font-size="11" fill="#5F5E5A">Basic tier &#8212; free, default</text>
 
-  <rect x="380" y="656" width="16" height="16" rx="3" fill="#E6F1FB" stroke="#378ADD" stroke-width="2"/>
-  <text x="404" y="669" font-size="11" fill="#5F5E5A">Stable core &#8212; rarely changes</text>
+  <rect x="380" y="652" width="16" height="16" rx="3" fill="#E6F1FB" stroke="#378ADD" stroke-width="2"/>
+  <text x="404" y="665" font-size="11" fill="#5F5E5A">Pro tier &#8212; free, opt-in</text>
 
-  <rect x="620" y="656" width="16" height="16" rx="3" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1.5"/>
-  <text x="644" y="669" font-size="11" fill="#5F5E5A">Pluggable module &#8212; add freely</text>
+  <rect x="600" y="652" width="16" height="16" rx="3" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="2"/>
+  <text x="624" y="665" font-size="11" fill="#5F5E5A">Shared &#8212; kernel &amp; platform</text>
 </svg>
