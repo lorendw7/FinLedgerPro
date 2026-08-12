@@ -39,6 +39,8 @@
 - [Financial Correctness Rules (Non-Negotiable)](#financial-correctness-rules-non-negotiable)
 - [Production Readiness Checklist](#production-readiness-checklist)
 - [Project Status](#project-status)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
@@ -612,6 +614,26 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 **Next step:** Phase 0 — scaffold the repo per the structure above and get a single personal transaction flowing end-to-end (Electron → FastAPI → SQLite → React), with `Decimal` money and the test/CI harness in place from day one.
 
 This is a **teaching project**: the author writes all code personally (see [Project Conventions](#project-conventions)). The production-readiness items above are targets to build toward, not yet implemented.
+
+---
+
+## Documentation
+
+| Document | What it covers |
+|----------|----------------|
+| [README](README.md) | Positioning, the Basic/Pro tiers, features, tech stack, roadmap, engineering standards |
+| [docs/architecture.md](docs/architecture.md) | The narrow-waist architecture ADR — kernel, tier layering, extensibility design points, worked example |
+| [CHANGELOG.md](CHANGELOG.md) | What has been decided and built, by release |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to report bugs and give feedback on a teaching project |
+| [LICENSE](LICENSE) | MIT |
+
+---
+
+## Contributing
+
+Bug reports, design critique, **accounting corrections**, and documentation fixes are very welcome. Feature and refactoring pull requests are respectfully declined — this is a teaching project in which the author writes all application code personally, and outside implementations would defeat its purpose.
+
+The project is MIT-licensed, so **forking is a first-class option** if you want to take it in your own direction. See [CONTRIBUTING.md](CONTRIBUTING.md) for details, including how to report issues without exposing real financial data.
 
 ---
 

@@ -1,0 +1,104 @@
+# ---------------------------------------------------------------------------
+# FinLedger Pro — .gitignore
+#
+# CRITICAL: this project handles real personal and business financial data.
+# Never commit ledger databases, backups, exports, or credentials.
+# ---------------------------------------------------------------------------
+
+# --- Financial data (NEVER commit) -----------------------------------------
+data/
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+backups/
+*.bak
+exports/
+*.xlsx
+*.csv
+!docs/**/*.csv          # sample/reference data in docs is fine
+tax_docs/
+chroma/
+*.chroma
+
+# --- Secrets & local config ------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+config.local.*
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib60/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+ENV/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.hypothesis/
+
+# --- Node / frontend -------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+frontend/dist/
+frontend/build/
+.vite/
+*.tsbuildinfo
+
+# --- Electron build output -------------------------------------------------
+release/
+out/
+electron/dist/
+*.dmg
+*.exe
+*.AppImage
+*.deb
+*.rpm
+*.zip
+*.blockmap
+
+# --- Logs ------------------------------------------------------------------
+logs/
+*.log
+
+# --- OS / editor -----------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
