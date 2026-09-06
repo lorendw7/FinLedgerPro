@@ -2,7 +2,7 @@
 
 > **Status:** Design / Architecture Decision Record (ADR) · 2026
 > **Audience:** the author (single developer) building FinLedger Pro phase by phase.
-> **Goal of this document:** define a system shape that serves both a *personal* finance user and a *small company*, and can grow to meet the company's full needs over time — without ever rewriting the core.
+> **Goal of this document:** define a system shape that serves both a *personal* finance user and a *small company*, and can grow to meet the company's core financial operating needs over time — without rewriting the core.
 
 ---
 
@@ -56,13 +56,13 @@ The line between the tiers is exactly the line between **single-entry cash-basis
 | Record | `transaction` (income / expense / transfer) | Voucher + journal entries |
 | Prerequisite knowledge | None | Debits and credits |
 
-**Basic is not a trial version.** It is a complete personal-finance tool that happens to share a kernel with a business accounting system. It ships first and stands alone.
+**Basic is not a trial version.** It is a complete personal-finance mode that happens to share a kernel with a business accounting system. A thin Basic flow validates the shared path early; the complete Basic feature set remains independently usable when delivered.
 
 ### What each tier contributes
 
 - **`core/`** — books, accounts, `Decimal` money, transactions, audit trail, migrations, backup, config. Both tiers depend on it. This is the narrow waist.
 - **`personal/`** — categories, budgets and alerts, need/want tagging, spending analysis, recurring detection, CSV export.
-- **`pro/`** — chart of accounts, journal & double-entry posting, trial balance, the six business modules, three statements, tax RAG, Excel/PDF export.
+- **`pro/`** — chart of accounts, journal & double-entry posting, trial balance, connected business workflows, three statements, tax RAG, Excel/PDF export.
 
 ---
 
@@ -88,11 +88,11 @@ Get the waist right and **adding any future feature is cheap**: it never touches
 
 ---
 
-## 4. Why This Scales to "All the Needs of a Small Company"
+## 4. Why This Scales Across a Small Company's Financial Needs
 
 Because the integration contract is tiny and universal: **a module's only job is to produce a balanced set of journal entries.** It does not need to know about reports, currencies, consolidation, or other modules. The ledger does not need to know what a module *means* — only that its entries balance.
 
-This decoupling is what lets the system absorb unbounded requirements:
+This decoupling lets the system add financial workflows without destabilising the ledger:
 
 - A new business need → a new module + a posting rule. Core unchanged.
 - A new report → a new read over the ledger. Core unchanged.
@@ -111,7 +111,7 @@ Each module owns a real-world process and knows how to express it as journal ent
 | **Personal Ledger** | 🟢 Basic | Personal accounts, categories, income/expense/transfer, budgets, spending analysis — its own `PERSONAL` book |
 | Revenue & Invoicing | 🔵 Pro | Contracts, invoices, AR, receipts, revenue recognition |
 | Expense & Payables | 🔵 Pro | Purchases/expenses, AP, payments, reimbursements |
-| Payroll · piece-rate | 🔵 Pro | Employment types × pay methods, output records, settlements, tax withholding |
+| Workforce Settlement | 🔵 Pro | Contractors, employment types × pay methods, output records, settlements, tax withholding; employee payroll later |
 | Cost & Inventory | 🔵 Pro | Cost allocation, project cost, (optional) stock movements |
 | Fixed Assets | 🔵 Pro | Asset register, depreciation accrual |
 | Bank & Cash | 🔵 Pro | Bank accounts, cash movements, reconciliation |
@@ -152,19 +152,20 @@ Every domain below is "just another subledger" that posts to the kernel. Priorit
 
 | Domain | Subledger module | Priority for this business |
 |--------|------------------|----------------------------|
-| **Personal finance** (🟢 Basic) | **Personal ledger — accounts, categories, transactions, budgets, spending analysis** | 🔴 **Highest — built first** (see [Section 6.1](#61-the-personal-ledger-basic-tier-separate-book-built-first)) |
+| **Personal finance** (🟢 Basic) | **Personal ledger — accounts, categories, transactions, budgets, spending analysis** | 🟠 Thin flow early; complete after the first business close (see [Section 6.1](#61-the-personal-ledger-basic-tier-separate-book-proved-early)) |
 | Expenditure cycle (P2P) | Expense/purchase, AP, payments, reimbursement | 🔴 High — pays annotators |
-| Payroll | Employment-type × pay-method, output, settlement, tax | 🔴 High — 劳务 + piece-rate core |
+| Contacts & documents | Customers, suppliers, contractors, attachments, document status | 🔴 High — shared by both business cycles |
+| Workforce settlement | Employment-type × pay-method, output, settlement, tax | 🔴 High — 劳务 + piece-rate core |
 | Revenue cycle (O2C) | Contract, invoice, AR, receipt, revenue recognition | 🔴 High — bills clients |
-| Cash & banking | Accounts, cash flow, **bank reconciliation** | 🟠 Medium |
+| Cash & banking | Statement import, cash movements, **bank reconciliation** | 🔴 High — proves recorded cash is real |
 | Cost & profit | Project cost allocation, gross margin, profit analysis | 🟠 Medium |
 | Fixed assets | Asset register, depreciation | 🟢 Low |
 | Tax | Tax payable, VAT/GST, tax-knowledge RAG (reference) | 🟢 Low — start with lookup |
 | Reporting & analysis | 3 statements, dashboards, AI, export | 🟠 Medium |
 
-### 6.1 The personal ledger (Basic tier): separate book, built first
+### 6.1 The personal ledger (Basic tier): separate book, proved early
 
-The personal ledger is the **entire Basic tier** and the **first thing built**, for two reasons: the owner has an immediate, concrete need (personal spending needs visibility and control), and it is the ideal **walking skeleton** — it exercises books, accounts, `Decimal` money, transactions, and reporting end to end without any business-domain complexity.
+The personal ledger is the **entire Basic tier**. A thin transaction flow is built early because it is an ideal **walking skeleton**—it exercises books, accounts, `Decimal` money, transactions, and reporting end to end without business-domain complexity. The complete Basic experience follows after the first trustworthy business close so it does not delay the owner's real bookkeeping need.
 
 Architecturally it demonstrates why the narrow waist works: **it required no change to the kernel.** The `entity_id` / `book_id` extension point (§7.3) already anticipated multiple sets of books, so the personal ledger is simply another book.
 
@@ -198,7 +199,7 @@ The full data-model blueprint and the spending-control feature set (fast capture
 
 ---
 
-## 7. The Four Extensibility Design Points
+## 7. The Five Extensibility Design Points
 
 These are what actually make "add anything later" cheap. They are non-negotiable foundations.
 
@@ -219,26 +220,29 @@ Operating in Singapore **and** China usually means **two legal entities, two set
 ### 7.4 Source documents + attachments + audit trail
 Every business event is a **source document** that *generates* a voucher (rather than someone hand-writing journal entries). Documents can carry attachments (invoice scans) and record who did what and when. This audit chain is the foundation of a production-grade, trustworthy ledger.
 
+### 7.5 Explicit lifecycle, reconciliation, and close controls
+Every financial document moves through a validated state machine such as `DRAFT → APPROVED → POSTED → PAID`, with cancellation handled by a linked reversal or credit record. Bank imports enter a staging area before matching, duplicate detection runs before posting, and every reconciliation preserves its evidence. Period locks prevent normal writes to a completed month. These controls are part of the domain model—not UI conventions that can be bypassed.
+
 ---
 
 ## 8. Recommended Growth Sequence
 
-Build the smallest closed loop first, then widen — tailored to the project's real operations. **The whole Basic tier ships before any Pro work begins.**
+Build the smallest closed loop first, then widen—tailored to the owner's real operations. Basic capture proves the shared kernel early, but completing every personal-finance feature is no longer allowed to delay the first trustworthy business bookkeeping loop.
 
 ```
-Kernel (Phase 0)
-   → 🟢 PERSONAL LEDGER  = BASIC TIER   (see where personal money goes)  ← ships first
-   ─────────────────────────────────────────────────────────────────────
-   → 🔵 Accounting core                 (chart of accounts, double-entry)
-   → 🔵 Expenditure + Payroll piece-rate (pay the annotators)
-   → 🔵 Revenue / Invoicing              (collect from clients)
-   → 🔵 Bank & Cash reconciliation       (reconcile cash)
-   → 🔵 Cost / Profit                    (see if it's profitable)
-   → 🔵 Fixed Assets
-   → 🔵 Tax / AI
+Local foundation + Basic capture          (prove the shared path)
+   → 🔵 Accounting core                   (chart, posting, trial balance, lock)
+   → 🔵 Contacts + source documents       (shared business vocabulary)
+   → 🔵 Expenditure + piece-rate settlement (pay the annotators)
+   → 🔵 Bank statement import/reconciliation (prove cash)
+   → 🔵 Revenue / invoicing / receipts    (collect from clients)
+   → 🔵 Month-end close + statements      (produce trustworthy books)
+   → 🔵 Project margin + SG/CN scale      (operate and understand)
+   → 🟢 Complete personal features
+   → 🔵 Optional tax reference / AI
 ```
 
-The first closed loop is the personal one: **record a spend → see it categorised → see it against a budget.** The business loop follows: **pay an annotator → post to the ledger → see it in a report.** Everything else is incremental.
+The walking skeleton still includes a personal flow: **record a spend → see it categorised.** The first production business loop is stricter: **accept annotation output → settle the contractor → post the payable and project cost → import the bank payment → reconcile it → close and report.** Everything else is incremental.
 
 ---
 
@@ -297,13 +301,14 @@ The annotation spend now flows automatically into **Cost**, **AP**, and the **P&
 
 ---
 
-## 10. Non-Goals (what "all needs" does *not* mean)
+## 10. Non-Goals (what broad small-business support does *not* mean)
 
-> **"Meet all the needs of a small company" ≠ "build every feature now."**
+> **"Support a small company's core financial operations" ≠ "replace every business system."**
 
 Trying to build everything up front leads to the never-shipping trap. The objective is the opposite: a core and extension points so well-defined that **adding any future feature is cheap and safe**. Concretely:
 
 - Do **not** gold-plate modules the business does not yet use.
+- Do **not** attempt to replace HR, CRM, legal case management, banking, statutory filing, or a full ERP in version 1.0.
 - Do **not** add a feature to the kernel that a subledger could own instead.
 - Do **not** let `personal/` and `pro/` reach into each other — shared logic belongs in `core/`.
 - Do **not** hold back features behind a paywall; there is no paid tier, and "Pro" is a disclosure boundary, not a commercial one.
@@ -314,3 +319,5 @@ Trying to build everything up front leads to the never-shipping trap. The object
 ## 11. Related Documents
 
 - [README](../README.md) — project positioning, the Basic/Pro tier comparison, tech stack, roadmap, and production-grade engineering standards (including the financial-correctness rules this architecture depends on).
+- [Xero Product Benchmark](xero-product-benchmark.md) — mature workflow patterns, adaptation decisions, and reliability controls.
+- [Product and Learning Roadmap](product-roadmap.md) — quality-gated delivery milestones and safe adoption for real books.

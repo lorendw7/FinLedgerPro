@@ -22,6 +22,7 @@
 - [Everything Is Free and Open Source](#everything-is-free-and-open-source)
 - [Why FinLedger Pro](#why-finledger-pro)
 - [Design Principles](#design-principles)
+- [Learning from Xero](#learning-from-xero)
 - [Scope: What It Is / What It Is Not](#scope-what-it-is--what-it-is-not)
 - [Technical Architecture](#technical-architecture)
 - [Basic Tier — Personal Ledger](#basic-tier--personal-ledger)
@@ -51,7 +52,7 @@
 **FinLedger Pro** is a **free and open-source, local-first desktop finance application** organised into two feature tiers:
 
 - **Basic — Personal bookkeeping.** Track where your money actually goes: accounts, categories, budgets, and spending analysis. Simple enough that no accounting knowledge is required. This is the default experience.
-- **Pro — Business accounting.** Full double-entry accounting for a startup or micro-business: chart of accounts, six operational modules, three financial statements, dual-market payroll (Singapore + China), AI analysis, and tax-knowledge lookup. Switched on when you need it.
+- **Pro — Business accounting.** Full double-entry accounting for a startup or micro-business: chart of accounts, connected operating workflows, three financial statements, dual-market payroll (Singapore + China), AI analysis, and tax-knowledge lookup. Switched on when you need it.
 
 Every piece of data lives on the user's own machine — no cloud dependency, no server to operate, no account to sign up for. **Both tiers are completely free and MIT-licensed** (see [Everything Is Free and Open Source](#everything-is-free-and-open-source)).
 
@@ -150,6 +151,31 @@ The boundary therefore exists for **progressive disclosure**, not monetisation. 
 
 ---
 
+## Learning from Xero
+
+[Xero](https://www.xero.com/us/accounting-software/) is a mature cloud accounting platform for small and medium-sized businesses. FinLedger Pro studies Xero as a **workflow and control benchmark**, not as a product to clone.
+
+The most valuable pattern is the connected daily loop:
+
+```text
+contacts → invoices / bills → payments → bank reconciliation → reports
+```
+
+FinLedger Pro adopts the underlying product lessons while preserving its own position:
+
+| Learn from Xero | FinLedger Pro adaptation |
+|---|---|
+| Bank reconciliation as a frequent, central task | Local CSV / OFX / QIF import first; live bank feeds deferred |
+| Source-document workflows | Bills, invoices, settlements, and payments generate immutable journal entries |
+| Contact-level financial history | One party record links AR, AP, payments, projects, and documents |
+| Project profitability and tracking dimensions | First-class annotation-project revenue, accepted-output cost, and margin |
+| Lock dates and history / notes | Period close controls and an append-only audit trail |
+| Fast automation with review | Rules suggest; the owner approves; AI cannot post autonomously in v1 |
+
+The detailed research, official references, product decisions, and study exercises are in [docs/xero-product-benchmark.md](docs/xero-product-benchmark.md). The quality-gated implementation sequence is in [docs/product-roadmap.md](docs/product-roadmap.md).
+
+---
+
 ## Scope: What It Is / What It Is Not
 
 | ✅ FinLedger Pro **is** | ❌ FinLedger Pro **is not** |
@@ -157,7 +183,7 @@ The boundary therefore exists for **progressive disclosure**, not monetisation. 
 | A free, MIT-licensed, local desktop finance tool | A cloud / SaaS service, or a paid product |
 | Two tiers in one app: personal (Basic) + business (Pro) | An open-core product with a proprietary paid edition |
 | Single-user, owned by the person running it | A multi-user team or accounting-firm platform |
-| A tool that *records, reports, and analyzes* finances | A **tax-filing** or statutory-submission system |
+| A tool that *records, reconciles, reports, and analyzes* finances | A **tax-filing** or statutory-submission system |
 | A provider of tax-knowledge *reference lookups* (with citations) | A source of legally binding tax or audit advice |
 | Fully offline-capable | Dependent on internet connectivity |
 | Bilingual (English / Chinese) for SG + CN | Single-market or single-language |
@@ -294,7 +320,7 @@ Enabling Pro mode adds a full double-entry accounting system on top of the same 
 - **Double-entry posting** — validates `debits == credits` before commit; unbalanced entries are rejected.
 - **Trial balance** — the bridge from journal to the three financial statements.
 
-### The six business modules
+### The business capability groups
 
 The Pro tier covers the full operational accounting chain.
 
@@ -303,9 +329,10 @@ The Pro tier covers the full operational accounting chain.
 | **Revenue Recognition** | Contract management, deferred/installment amortization, three-state tracking (invoiced / received / recognized) | SG + CN |
 | **Cost Accounting** | Direct/indirect cost classification, project allocation, automatic gross-margin calculation | SG + CN |
 | **Receivables & Payables (AR/AP)** | Invoice tracking, aging analysis (30/60/90 days), overdue alerts, payment schedules | SG + CN |
-| **Payroll & Compensation** | Singapore CPF / China 五险一金 / piece-rate 劳务, automatic payslip generation | SG / CN |
+| **Workforce Settlement & Payroll** | Piece-rate contractor settlement first; Singapore CPF / China 五险一金 employee payroll later | SG / CN |
 | **Fixed-Asset Depreciation** | Straight-line / double-declining-balance methods, monthly auto-accrual, asset register | SG + CN |
 | **Profit Analysis** | Three-tier analysis (gross / operating / net profit), 12-month trend, AI interpretation | SG + CN |
+| **Banking & Reconciliation** | Statement import, duplicate detection, matching, transfers, reconciliation evidence, and difference reporting | SG + CN |
 
 ---
 
@@ -333,19 +360,19 @@ Turning on Pro mode does not migrate or convert the personal book — the two re
 | Item | Singapore | China |
 |------|-----------|-------|
 | **Primary currency** | SGD | CNY |
-| **Payroll & social security** | CPF (Employee 20% + Employer 17%) | Five-Insurances-One-Fund (rates vary by locality) |
-| **Tax reference** | GST 9%, Corporate Income Tax 17% | VAT 6% / 13%, Corporate Income Tax 25% |
+| **Payroll & social security** | CPF eligibility and effective-dated rates depend on worker status, age, wage type, and statutory limits | Five-Insurances-One-Fund eligibility, bases, and rates vary by locality and effective period |
+| **Tax reference** | Effective-dated Singapore GST and corporate-tax reference rules | Effective-dated China VAT and corporate-tax reference rules by taxpayer and transaction type |
 | **Financial year** | Apr–Mar or Jan–Dec (selectable) | Jan–Dec |
 | **Report language** | Bilingual (EN/ZH) | Chinese |
 
-> Tax rates above are reference figures for understanding and analysis — not official filing guidance.
+> Tax and contribution rules are versioned reference configuration—not permanent constants and not official filing guidance. Every calculation preserves the jurisdiction, effective date, source, and rule version used.
 
 ### Payroll & Social Contributions (the hardest module)
 
 Payroll is the most complex Pro module because **statutory social-contribution rules differ by jurisdiction, change every year, and depend on more than a flat percentage of salary**. The system therefore models both schemes with **configurable rates** (stored in editable configuration, not hard-coded), so the user can update them when policy changes without a new release.
 
 **Singapore — CPF (Central Provident Fund / 中央公积金):**
-A mandatory retirement, housing, and healthcare savings scheme. Both employer and employee contribute a percentage of monthly wages (commonly ~17% employer + ~20% employee for younger workers), split across Ordinary, Special, and MediSave accounts. Rates **step down by age band**, are capped by a **monthly wage ceiling**, and apply only to **citizens and permanent residents** — not foreign work-pass holders.
+A mandatory retirement, housing, and healthcare savings scheme. Employer and employee obligations depend on worker status, age band, wage type, statutory ceilings, and the rule's effective date; allocations are made across CPF accounts. The implementation must obtain current rules from an authoritative source and preserve the exact rule version used for every completed calculation.
 
 **China — Five Insurances and One Fund (五险一金):**
 Five social insurances — pension (养老), medical (医疗), unemployment (失业), work-injury (工伤, employer only), maternity (生育, employer only) — plus the Housing Provident Fund (住房公积金). Both sides contribute, each at its own rate. Critically, **the rates and the contribution base (缴费基数, with a local floor and ceiling) are set per city/province** and revised periodically, so the same salary produces different deductions in Beijing vs Shenzhen.
@@ -367,7 +394,7 @@ The `employment_type` field drives four downstream decisions:
 3. **Tax treatment** — employment income vs labor-remuneration withholding.
 4. **Contract requirement** — written contract / written terms / service agreement.
 
-All rates and contribution bases stay in editable configuration so they can be updated per locality and year without a code change. *(Rules above are general reference, not legal advice — confirm with IRAS/MOM, the local 人社局, or a professional before acting.)*
+All rates and contribution bases stay in effective-dated, source-attributed configuration so they can be updated per locality and period without a code change while historical results remain reproducible. A configured label does not determine the legal nature of a working relationship; classification depends on the actual facts and applicable law. *(Rules above are general reference, not legal advice—confirm with CPF Board / IRAS / MOM, the local 人社局, tax authorities, or a qualified professional before acting.)*
 
 **Why it is built last and split SG-first:** the rules are external, locale-specific, and frequently updated, making this the most error-prone module and the one most coupled to policy. Singapore CPF is implemented first; China's locale-dependent rules follow. A worked example of the piece-rate 劳务 flow is in [docs/architecture.md](docs/architecture.md#8-worked-example-data-annotation-piece-rate-flow).
 
@@ -401,17 +428,22 @@ When the user triggers an analysis, the request flows through a sequence of Lang
 
 ## Development Roadmap
 
-The project is built as a sequence of phases over roughly seven weeks. **Phase 0 builds a thin end-to-end "walking skeleton"**, then **the entire Basic tier ships before any Pro work begins** — it delivers immediate value and exercises the whole stack before business complexity is added. Tests, linting, and CI are set up in Phase 0 and maintained continuously. Treat this as the path to a usable **v0.1**, with full payroll and the AI engine as stretch goals.
+The roadmap now uses **quality-gated milestones instead of a seven-week deadline**. A single developer learning accounting should not trade correctness or recoverability for calendar speed. The first priority is a complete business workflow that the owner can reconcile and close; broad features and AI follow only after the books are trustworthy.
 
-| Phase | Timeline | Tier | Deliverable |
-|-------|----------|------|-------------|
-| **Phase 0** | Week 1 (first half) | — | Walking skeleton: one transaction end-to-end (Electron → FastAPI → SQLite → React) + test / lint / CI scaffolding |
-| **Phase 1** | Weeks 1–2 | 🟢 Basic | **Personal ledger complete** — books, accounts, categories, transactions (`INCOME`/`EXPENSE`/`TRANSFER`), fast capture, budgets & alerts, need/want, spending analysis, `Decimal` money, derived balances, CSV export, automatic backup. Unit & property tests written alongside. **Basic tier is shippable at the end of this phase.** |
-| **Phase 2** | Week 3 | 🔵 Pro | Accounting core: chart of accounts, vouchers/journal, double-entry posting with **balance validation**, trial balance, Pro-mode toggle |
-| **Phase 3** | Week 4 | 🔵 Pro | Business module APIs by value: revenue / cost / AR / AP, then assets, then payroll (**SG CPF first, CN later**) |
-| **Phase 4** | Week 5 | 🔵 Pro | Three-statement generation (built on the trial balance) + Excel/PDF export |
-| **Phase 5** | Week 6 | Both | Ollama integration + LangGraph AI analysis engine (minimal, supporting) |
-| **Phase 6** | Week 7 | 🔵 Pro | Tax RAG knowledge base (reference) + full end-to-end testing, code-signing & packaging |
+| Milestone | Focus | Release gate |
+|---|---|---|
+| **M0 — Definition** | Positioning, architecture, Xero benchmark, scope, and reliability rules | Documents agree on terminology, boundaries, sequence, and non-goals |
+| **M1 — Local foundation** | Walking skeleton, separate books, `Decimal`, migrations, audit events, idempotency, backup and restore | Crash, retry, integrity, and clean-restore tests pass |
+| **M2 — Accounting kernel** | Chart of accounts, source-document lifecycle, balanced posting, trial balance, opening balances, period locks | Posted history is immutable; trial balance reproduces the journal; closed periods reject changes |
+| **M3 — Spend to reconcile** | Contacts, bills, annotation output and contractor settlement, AP, bank-file import and reconciliation, Action Center | Accepted output → settlement → payable → payment → reconciliation → cost report works without a spreadsheet |
+| **M4 — Earn to reconcile** | Contracts/projects, invoices, credit notes, AR, receipts, aging, project margin | Client job → invoice → receipt → reconciliation → margin handles partial payment and cancellation safely |
+| **M5 — Close and report** | Month-end checklist, three statements, reconciliation report, drill-down, fixed assets, export | Every balance traces to evidence; a closed month reproduces after restore |
+| **M6 — SG/CN scale** | SGD/CNY, effective-dated FX, multi-entity isolation, intercompany and consolidation | Historical reports remain stable; entity isolation and consolidation invariants pass |
+| **M7 — Basic completion** | Personal capture, budgets, credit cards, transfers, net worth, spending analysis | Transfers never become spending; personal and business books remain isolated |
+| **M8 — Production RC** | Encryption, supply-chain checks, full test matrix, diagnostics, signed installers, upgrade/rollback | All production gates pass plus one full parallel shadow-book close |
+| **M9 — Optional intelligence** | Rules, forecasts, local AI, tax RAG, selected integrations | Disabling AI changes no accounting result; AI cannot mutate books without approval |
+
+The detailed deliverables, finance lessons, acceptance gates, version labels, and safe adoption process are maintained in [docs/product-roadmap.md](docs/product-roadmap.md).
 
 ---
 
@@ -437,16 +469,19 @@ On completion, the project ships as directly installable desktop packages — **
 
 ## Companion Finance Learning Path
 
-This project is built as a **teaching project**: the author writes the code themselves, paced alongside a structured finance & accounting curriculum. Each week of learning maps directly onto the software module being built, so theory is applied immediately.
+This project is a **teaching project**: the author writes all implementation code personally. Each milestone begins with finance theory, applies it in a small implementation, and ends by reconciling the code's output to a worked accounting example.
 
-| Week | Learning Topic | Corresponding Module | Tier |
-|------|----------------|----------------------|------|
-| **Week 1** | Personal cash flow, categories, budgeting, entity assumption | Personal ledger | 🟢 Basic |
-| **Week 2** | The five accounting elements + debit/credit rules | Accounting core (chart of accounts, journal) | 🔵 Pro |
-| **Week 3** | Revenue recognition + cost accounting | Revenue module + Cost module | 🔵 Pro |
-| **Week 4** | Receivables/payables + aging analysis | AR/AP module | 🔵 Pro |
-| **Week 5** | Payroll calculation (SG CPF + CN 五险一金 + piece-rate) | Payroll module | 🔵 Pro |
-| **Week 6** | Fixed-asset depreciation + comprehensive three-statement exercises | Fixed assets + statement generation | 🔵 Pro |
+| Milestone | Finance lesson | Applied software work |
+|---|---|---|
+| **M1** | Entity assumption, monetary precision, source evidence, and internal control | Separate books, `Decimal`, audit trail, backup / restore |
+| **M2** | Five accounting elements, debit / credit rules, accrual basis, and opening balances | Chart of accounts, journal, posting, trial balance, period locks |
+| **M3** | Expenses vs assets, AP, cost recognition, withholding, and reconciliation | Bills, piece-rate contractor settlements, bank import and matching |
+| **M4** | Revenue recognition, AR, credit notes, deposits, and partial payments | Invoices, receipts, aging, project revenue and margin |
+| **M5** | Accruals, prepayments, depreciation, month-end close, and the three statements | Closing checklist, reports, drill-down and exports |
+| **M6** | Functional currency, realized / unrealized FX, intercompany, and consolidation | SGD/CNY books, FX snapshots, entity isolation and consolidated reports |
+| **M7** | Cash budgeting, credit-card liabilities, transfers, net worth, and savings rate | Complete Basic personal-finance experience |
+| **M8** | Threat modeling, recovery objectives, software supply chain, and release controls | Production hardening and shadow-book validation |
+| **M9** | Forecast uncertainty, explainable automation, and retrieval quality | Local AI and tax-reference assistance after accounting is stable |
 
 ---
 
@@ -486,7 +521,7 @@ FinLedgerPro/
 │   ├── ai/                  # LangChain / LangGraph workflow + Ollama (both tiers)
 │   └── db/                  # SQLite schema, migrations, data access
 ├── data/                    # Local SQLite file, FX cache, tax PDFs (gitignored)
-├── docs/                    # English documentation
+├── docs/                    # English architecture, roadmap, research, and runbooks
 ├── tests/                   # Unit, property, integration, and E2E tests
 ├── LICENSE                  # MIT
 └── README.md
@@ -507,6 +542,8 @@ FinLedgerPro/
 - **Records are immutable + audit trail.** Posted entries are never edited or deleted in place; corrections are made via reversing entries. Every record carries `created_at`, `created_by`, and a reason.
 - **Deterministic rounding.** Currency conversion and tax math use explicit, documented rounding rules (e.g. banker's rounding, 2 decimal places) so results are reproducible.
 - **ACID transactions.** Multi-step postings run inside a single database transaction — all succeed or all roll back.
+- **Idempotent commands.** Repeating the same create, post, settle, pay, or import command has one financial effect, never two.
+- **Controlled document states.** Source documents move through explicit draft, approval, posting, payment/settlement, and reversal states; invalid transitions are rejected.
 
 ### 2. Testing & Quality Gates
 
@@ -532,8 +569,11 @@ Because all data lives in one local SQLite file, **data loss is the single bigge
 
 - **Schema migrations.** Schema changes are versioned and applied via a migration tool (e.g. Alembic) so upgrading never corrupts existing books.
 - **Automatic backups.** Timestamped local backups on a schedule and before every migration, with one-click restore.
+- **Verified restore.** Backup health includes a periodic automated restore-and-open test; a file that has never been restored is not yet a trusted backup.
 - **Integrity checks.** On startup the app runs `PRAGMA integrity_check` and verifies the books still balance; problems are surfaced, not hidden.
 - **Crash recovery.** Write-ahead logging (WAL) and atomic writes ensure an interrupted save never leaves a half-written ledger.
+- **Duplicate-safe imports.** Bank files and statement lines are fingerprinted and staged before posting, preventing accidental duplicate cash movements.
+- **Reconciliation and close controls.** Bank differences remain visible until resolved; closed periods reject changes unless an explicit, audited unlock occurs.
 - **Graceful degradation.** If the AI model or exchange-rate refresh is unavailable, core bookkeeping keeps working.
 
 ### 5. Build, Release & Updates
@@ -578,6 +618,11 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 | **Correctness** | `TRANSFER` excluded from spending totals | ☐ |
 | **Correctness** | Balanced-entry validation (Pro) | ☐ |
 | **Correctness** | Property tests for accounting invariants | ☐ |
+| **Correctness** | Idempotent posting, payment, settlement, and import commands | ☐ |
+| **Workflow** | Draft → approve → post → reverse state controls | ☐ |
+| **Workflow** | Source document → journal → report drill-down | ☐ |
+| **Workflow** | Bank import staging, duplicate detection, and reconciliation evidence | ☐ |
+| **Workflow** | Period lock and month-end close checklist | ☐ |
 | **Testing** | Engine unit coverage ≥ 90% | ☐ |
 | **Testing** | E2E tests for critical flows in both tiers | ☐ |
 | **Architecture** | `personal/` and `pro/` have no mutual dependency | ☐ |
@@ -586,6 +631,7 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 | **Security** | Signed & notarized installers | ☐ |
 | **Reliability** | Versioned DB migrations | ☐ |
 | **Reliability** | Automatic backups + one-click restore | ☐ |
+| **Reliability** | Automated restore verification | ☐ |
 | **Reliability** | Startup integrity + balance check | ☐ |
 | **Release** | CI runs tests/lint/types on every change | ☐ |
 | **Release** | Auto-update for the desktop app | ☐ |
@@ -597,21 +643,22 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 
 ## Project Status
 
-🚧 **In development — at Phase 0, building not yet started.**
+🚧 **In development — M0 design is complete; M1 implementation has not started.**
 
 **Decided / done**
 - ✅ Positioning restructured into two free tiers: **Basic (personal)** and **Pro (business)**.
 - ✅ Scope, architecture, and tier boundary defined (this document + [docs/architecture.md](docs/architecture.md)).
+- ✅ Xero studied as a workflow/control benchmark; adoption and non-copy decisions documented.
 - ✅ Tech stack chosen (Electron + React/Tailwind + FastAPI + Ollama/LangGraph + SQLite + ChromaDB).
 - ✅ Licensed under **MIT** — everything free and open source, no paid tier.
 - ✅ Engineering standards and financial-correctness rules agreed.
-- ✅ Roadmap sequenced so the Basic tier ships complete before Pro work begins.
+- ✅ Roadmap changed from a seven-week feature schedule to quality-gated product milestones focused on real-book reliability.
 
 **Not started yet**
 - ⬜ No application code written — the repository currently holds only documentation and the license.
-- ⬜ Phase 0 walking skeleton is the immediate next step.
+- ⬜ M1 trustworthy local foundation is the immediate next step.
 
-**Next step:** Phase 0 — scaffold the repo per the structure above and get a single personal transaction flowing end-to-end (Electron → FastAPI → SQLite → React), with `Decimal` money and the test/CI harness in place from day one.
+**Next step:** M1 — scaffold the repo per the structure above and get one personal transaction plus one business source document flowing end-to-end (Electron → FastAPI → SQLite → React), with `Decimal`, idempotency, audit events, migrations, test/CI, backup, and restore in place from day one.
 
 This is a **teaching project**: the author writes all code personally (see [Project Conventions](#project-conventions)). The production-readiness items above are targets to build toward, not yet implemented.
 
@@ -623,6 +670,8 @@ This is a **teaching project**: the author writes all code personally (see [Proj
 |----------|----------------|
 | [README](README.md) | Positioning, the Basic/Pro tiers, features, tech stack, roadmap, engineering standards |
 | [docs/architecture.md](docs/architecture.md) | The narrow-waist architecture ADR — kernel, tier layering, extensibility design points, worked example |
+| [docs/xero-product-benchmark.md](docs/xero-product-benchmark.md) | What Xero is, which workflows and controls to learn from, what not to copy, and how to study it safely |
+| [docs/product-roadmap.md](docs/product-roadmap.md) | Quality-gated milestones, finance lessons, acceptance gates, release labels, and real-book adoption plan |
 | [CHANGELOG.md](CHANGELOG.md) | What has been decided and built, by release |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to report bugs and give feedback on a teaching project |
 | [LICENSE](LICENSE) | MIT |

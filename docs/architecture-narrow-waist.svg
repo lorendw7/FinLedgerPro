@@ -14,7 +14,7 @@
   <text x="450" y="42" text-anchor="middle" font-size="11" fill="#5F5E5A">Both tiers are free and MIT-licensed &#8212; the boundary is progressive disclosure, not a paywall</text>
 
   <!-- TIER: BASIC -->
-  <text x="240" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#3B6D11">&#128994; BASIC &#183; &#20010;&#20154;&#35760;&#36134; &#8212; ships first</text>
+  <text x="240" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#3B6D11">&#128994; BASIC &#183; &#20010;&#20154;&#35760;&#36134; &#8212; thin flow early</text>
   <rect x="40" y="76" width="400" height="170" rx="10" fill="#EAF3DE" stroke="#639922" stroke-width="2"/>
   <text x="240" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#3B6D11">Personal Ledger &#183; PERSONAL book</text>
   <text x="240" y="115" text-anchor="middle" font-size="11" fill="#3B6D11">cash basis &#183; single-entry &#183; no accounting knowledge needed</text>
