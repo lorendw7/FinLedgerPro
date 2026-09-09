@@ -1,5 +1,7 @@
 # Contributing to FinLedger Pro
 
+[English](CONTRIBUTING.md) | [简体中文](CONTRIBUTING.zh-CN.md)
+
 Thank you for your interest. Please read this page first — this repository has an
 unusual workflow, and knowing it up front will save you time.
 
@@ -33,12 +35,15 @@ so correctness matters more than convenience.
 
 ---
 
-## Fork freely
+## Build downstream freely
 
-The project is [MIT-licensed](LICENSE). You are entirely free to fork it, modify
-it, redistribute it, or build a commercial product on top of it — no permission
-needed, provided you keep the copyright notice. If the workflow above does not
-suit you, forking is a first-class option and no offence is taken.
+The project is [MIT-licensed](LICENSE). You are entirely free to modify it,
+redistribute it, or build a private or commercial product on top of it — no
+permission needed, subject to the licence notice requirements. For company
+customisation, prefer a separate private repository that depends on a tagged
+public-core release; use a fork only when a required change cannot be expressed
+through an extension contract. See [Public Core and Private Company
+Repositories](docs/public-core-and-private-company-repos.md).
 
 ---
 
@@ -72,18 +77,25 @@ so a fix can be prepared before disclosure.
 If you contribute documentation, please follow the conventions the repository
 already uses:
 
-- **All documentation is written in English.**
+- Major reader-facing documents are maintained as paired English and Simplified Chinese files. Update both editions when changing meaning; English is the canonical technical wording if they temporarily differ.
 - **All code comments are written in English.**
-- Discussion may happen bilingually (Chinese + English), but written artefacts
-  in the repository stay in English.
+- Discussion and reader-facing documents may be bilingual; code comments and
+  identifiers remain in English.
 - Money is always `Decimal` — never floating point. See the
   [financial-correctness rules](README.md#financial-correctness-rules-non-negotiable).
 - `personal/` and `pro/` may both depend on `core/`, but **never on each other**.
+- Company-private repositories may depend on tagged public-core releases; the
+  public core must never depend on private company code.
+- Banking providers are read-only. They may expose accounts, balances, and
+  transactions, but never payments, payouts, beneficiaries, collections, or
+  card control.
 
 ---
 
 ## Where to start reading
 
-- [README](README.md) — positioning, tiers, features, roadmap, engineering standards.
-- [docs/architecture.md](docs/architecture.md) — the narrow-waist architecture and why the system is shaped this way.
+- [README](README.md) · [中文](README.zh-CN.md) — positioning, tiers, features, roadmap, engineering standards.
+- [docs/architecture.md](docs/architecture.md) · [中文](docs/architecture.zh-CN.md) — the narrow-waist architecture and why the system is shaped this way.
+- [Open API & multi-currency](docs/open-api-and-multi-currency.md) · [中文](docs/open-api-and-multi-currency.zh-CN.md) — provider and FX design.
+- [Public core & private company repositories](docs/public-core-and-private-company-repos.md) · [中文](docs/public-core-and-private-company-repos.zh-CN.md) — downstream and banking boundaries.
 - [CHANGELOG.md](CHANGELOG.md) — what has been decided and built so far.

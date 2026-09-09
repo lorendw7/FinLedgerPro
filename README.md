@@ -1,6 +1,8 @@
 # FinLedger Pro
 
-**Free, open-source, local-first finance software — personal bookkeeping for everyone, full business accounting when you need it.**
+[English](README.md) | [简体中文](README.zh-CN.md)
+
+**A free, open-source, local-first accounting core and reference app — ready for personal use and private company customisation.**
 
 *Basic (personal) + Pro (business) · SGD + CNY · Fully offline · Privacy-first · AI-assisted · MIT*
 
@@ -54,7 +56,7 @@
 - **Basic — Personal bookkeeping.** Track where your money actually goes: accounts, categories, budgets, and spending analysis. Simple enough that no accounting knowledge is required. This is the default experience.
 - **Pro — Business accounting.** Full double-entry accounting for a startup or micro-business: chart of accounts, connected operating workflows, three financial statements, dual-market payroll (Singapore + China), AI analysis, and tax-knowledge lookup. Switched on when you need it.
 
-Every piece of data lives on the user's own machine — no cloud dependency, no server to operate, no account to sign up for. **Both tiers are completely free and MIT-licensed** (see [Everything Is Free and Open Source](#everything-is-free-and-open-source)).
+Every piece of core accounting data lives on the user's own machine — no mandatory cloud service, hosted account, or subscription. **Both tiers and the reusable public core are completely free and MIT-licensed** (see [Everything Is Free and Open Source](#everything-is-free-and-open-source)). A company may keep its own branding, mappings, workflows, and provider configuration in a separate private repository that depends on a released public-core version.
 
 ### What the name means
 
@@ -113,10 +115,14 @@ The boundary therefore exists for **progressive disclosure**, not monetisation. 
 
 **There is no paid tier, no licence key, no subscription, no feature paywall, and no telemetry.**
 
+The maintainer has no plan to commercialise the public project. FinLedger Pro's reusable accounting core and reference application remain public and open source; “Pro” will never become a paid edition.
+
 - The complete source code — Basic *and* Pro — is published under the **[MIT License](LICENSE)**.
 - "Pro" denotes an **advanced feature set**, not a commercial edition. Enabling it is a settings toggle, not a purchase.
-- This is **not** an open-core model: nothing is withheld in a proprietary edition.
+- This is **not** an open-core sales model: the maintainer withholds no proprietary paid tier. Downstream companies may still keep their own company-specific extension repositories private.
 - Anyone may use, modify, redistribute, or build commercial products on top of the code, provided the copyright notice is retained.
+
+The supported customisation model is **company private repository → tagged public-core release**, not a long-lived private fork. See [Public Core and Private Company Repositories](docs/public-core-and-private-company-repos.md).
 
 ---
 
@@ -141,13 +147,14 @@ The boundary therefore exists for **progressive disclosure**, not monetisation. 
 
 1. **Local-first.** All computation and storage happen on the user's machine. Fully usable with the network cable unplugged.
 2. **Privacy by architecture.** Financial data never leaves the device. The AI model (Ollama / Qwen2.5) runs locally, so even AI analysis transmits nothing.
-3. **Free and open, entirely.** Every feature in every tier is MIT-licensed and free. No paywalls, no open-core withholding.
+3. **A fully open public foundation.** Every feature shipped by this repository is MIT-licensed and free. Companies may own private downstream extensions without turning the upstream project into a paid open-core product.
 4. **Progressive disclosure.** Complexity appears only when asked for. Basic hides everything a personal user does not need; Pro reveals it on request.
-5. **Offline by default, online by exception.** The only optional online touchpoints are exchange-rate refresh and tax-knowledge updates — both cached and never required.
+5. **Offline by default, online by exception.** Optional online touchpoints are exchange-rate refresh, tax-knowledge updates, and read-only bank feeds. All are replaceable, cached where appropriate, and never required to open or operate the books.
 6. **Accounting-correct.** The Pro kernel implements proper double-entry bookkeeping so the three statements can be generated to standard.
 7. **Dual-market native.** Singapore and China differences are first-class concepts in the data model, not afterthoughts.
 8. **AI as an assistant, not an authority.** AI provides analysis, forecasts, and *cited* tax references — it never files taxes or makes binding decisions.
 9. **Educational by design.** Built as a structured learning vehicle: phases map onto a finance & accounting curriculum (see [Companion Finance Learning Path](#companion-finance-learning-path)).
+10. **Open interfaces, replaceable providers.** Optional network features use open standards and pluggable adapters, with a manual/offline path always available.
 
 ---
 
@@ -158,21 +165,23 @@ The boundary therefore exists for **progressive disclosure**, not monetisation. 
 The most valuable pattern is the connected daily loop:
 
 ```text
-contacts → invoices / bills → payments → bank reconciliation → reports
+contacts → invoices / bills → receipt and payment records → bank reconciliation → reports
 ```
 
 FinLedger Pro adopts the underlying product lessons while preserving its own position:
 
 | Learn from Xero | FinLedger Pro adaptation |
 |---|---|
-| Bank reconciliation as a frequent, central task | Local CSV / OFX / QIF import first; live bank feeds deferred |
-| Source-document workflows | Bills, invoices, settlements, and payments generate immutable journal entries |
+| Bank reconciliation as a frequent, central task | Local CSV / OFX / QIF first; read-only bank feeds use the same staging and reconciliation path |
+| Source-document workflows | Bills, invoices, settlements, and externally evidenced payment records generate immutable journal entries |
 | Contact-level financial history | One party record links AR, AP, payments, projects, and documents |
 | Project profitability and tracking dimensions | First-class annotation-project revenue, accepted-output cost, and margin |
 | Lock dates and history / notes | Period close controls and an append-only audit trail |
 | Fast automation with review | Rules suggest; the owner approves; AI cannot post autonomously in v1 |
 
 The detailed research, official references, product decisions, and study exercises are in [docs/xero-product-benchmark.md](docs/xero-product-benchmark.md). The quality-gated implementation sequence is in [docs/product-roadmap.md](docs/product-roadmap.md).
+
+FinLedger Pro is **not affiliated with, endorsed by, or derived from Xero source code**. It learns from publicly documented accounting workflows such as bank reconciliation, contact histories, project profitability, lock dates, and audit trails; no Xero code, branding, screenshots, or proprietary assets are used.
 
 ---
 
@@ -184,6 +193,7 @@ The detailed research, official references, product decisions, and study exercis
 | Two tiers in one app: personal (Basic) + business (Pro) | An open-core product with a proprietary paid edition |
 | Single-user, owned by the person running it | A multi-user team or accounting-firm platform |
 | A tool that *records, reconciles, reports, and analyzes* finances | A **tax-filing** or statutory-submission system |
+| A system that imports read-only bank transactions and records settlements | A payment initiator, payout service, card platform, or bank-control interface |
 | A provider of tax-knowledge *reference lookups* (with citations) | A source of legally binding tax or audit advice |
 | Fully offline-capable | Dependent on internet connectivity |
 | Bilingual (English / Chinese) for SG + CN | Single-market or single-language |
@@ -207,7 +217,8 @@ FinLedger Pro uses a three-layer runtime architecture — **desktop shell + loca
 | **Local LLM** | Ollama (Qwen2.5) | Fully offline, bilingual, data never leaves the machine |
 | **Database** | SQLite | Local file, no server required |
 | **Tax knowledge base** | ChromaDB + RAG | Vector retrieval, PDF import, reference lookup only |
-| **Currency conversion** | ExchangeRate API (cached) | SGD ↔ CNY with local cache |
+| **Open integration layer** | Provider adapters + local cache | FX and read-only bank feeds; every provider remains replaceable and no payment methods are exposed |
+| **Currency data** | Manual rates + Frankfurter / ECB candidates | ISO 4217 multi-currency model; SGD/CNY first; historical rate snapshots |
 
 **Tier layering.** Both tiers run on one shared kernel — books, accounts, `Decimal` money, transactions, audit trail, and persistence. `personal/` and `pro/` are two feature layers above it. Enabling Pro mounts additional modules and routes; it does not fork the data model or launch a second application.
 
@@ -332,7 +343,7 @@ The Pro tier covers the full operational accounting chain.
 | **Workforce Settlement & Payroll** | Piece-rate contractor settlement first; Singapore CPF / China 五险一金 employee payroll later | SG / CN |
 | **Fixed-Asset Depreciation** | Straight-line / double-declining-balance methods, monthly auto-accrual, asset register | SG + CN |
 | **Profit Analysis** | Three-tier analysis (gross / operating / net profit), 12-month trend, AI interpretation | SG + CN |
-| **Banking & Reconciliation** | Statement import, duplicate detection, matching, transfers, reconciliation evidence, and difference reporting | SG + CN |
+| **Banking & Reconciliation** | File/API statement import, duplicate detection, matching, recorded transfers, reconciliation evidence, and difference reporting; read-only, with no payment initiation | SG + CN |
 
 ---
 
@@ -350,10 +361,14 @@ Turning on Pro mode does not migrate or convert the personal book — the two re
 
 ### Currency Handling
 
-- Record transactions in **SGD** or **CNY**. Basic supports a manual rate; Pro adds automatic rates and consolidation.
-- Pro converts all transactions to a **unified reference currency (SGD)** for consolidated reporting.
-- Exchange-rate data is **cached locally** for offline use and refreshed automatically when online.
-- Statements can be displayed in three modes: **SGD only**, **CNY only**, or **side-by-side dual-currency comparison**.
+- Model currencies with ISO 4217 codes. **SGD and CNY are the first fully tested currencies**, while the data model and provider interface support additional currencies without schema changes.
+- Every book has a **functional currency**; every transaction preserves its original currency and amount plus the functional-currency amount.
+- Every conversion stores a rate snapshot: provider, rate date, retrieval time, quote convention, and whether the user overrode it. Historical reports never change when a later rate is downloaded.
+- Manual rates are always available. Optional online rates use a replaceable provider adapter and a local cache; bookkeeping continues when every API is offline.
+- The first provider candidates are [Frankfurter](https://frankfurter.dev/) (open source and self-hostable) and the [ECB Data API](https://data.ecb.europa.eu/help/getting-data-web-services-sdmx-0) (official reference data). Reference rates are suggestions, not automatically authoritative tax or transaction rates.
+- Reports may use the book's functional currency or a selected presentation currency. Pro later adds realized/unrealized FX treatment and multi-entity consolidation.
+
+The full provider policy, data contract, fallback behavior, and accounting rules are documented in [docs/open-api-and-multi-currency.md](docs/open-api-and-multi-currency.md).
 
 ### Singapore vs China Business Differences
 
@@ -396,7 +411,7 @@ The `employment_type` field drives four downstream decisions:
 
 All rates and contribution bases stay in effective-dated, source-attributed configuration so they can be updated per locality and period without a code change while historical results remain reproducible. A configured label does not determine the legal nature of a working relationship; classification depends on the actual facts and applicable law. *(Rules above are general reference, not legal advice—confirm with CPF Board / IRAS / MOM, the local 人社局, tax authorities, or a qualified professional before acting.)*
 
-**Why it is built last and split SG-first:** the rules are external, locale-specific, and frequently updated, making this the most error-prone module and the one most coupled to policy. Singapore CPF is implemented first; China's locale-dependent rules follow. A worked example of the piece-rate 劳务 flow is in [docs/architecture.md](docs/architecture.md#8-worked-example-data-annotation-piece-rate-flow).
+**Why statutory employee payroll is deferred:** the rules are external, locale-specific, and frequently updated, making this the most error-prone capability and the one most coupled to policy. The actual data-annotation need—piece-rate contractor settlement—is built first. If employee payroll is later required, Singapore CPF is validated before China's locality-dependent rules. A worked example of the piece-rate 劳务 flow is in [docs/architecture.md](docs/architecture.md#9-worked-example-data-annotation-piece-rate-flow).
 
 ---
 
@@ -435,13 +450,13 @@ The roadmap now uses **quality-gated milestones instead of a seven-week deadline
 | **M0 — Definition** | Positioning, architecture, Xero benchmark, scope, and reliability rules | Documents agree on terminology, boundaries, sequence, and non-goals |
 | **M1 — Local foundation** | Walking skeleton, separate books, `Decimal`, migrations, audit events, idempotency, backup and restore | Crash, retry, integrity, and clean-restore tests pass |
 | **M2 — Accounting kernel** | Chart of accounts, source-document lifecycle, balanced posting, trial balance, opening balances, period locks | Posted history is immutable; trial balance reproduces the journal; closed periods reject changes |
-| **M3 — Spend to reconcile** | Contacts, bills, annotation output and contractor settlement, AP, bank-file import and reconciliation, Action Center | Accepted output → settlement → payable → payment → reconciliation → cost report works without a spreadsheet |
+| **M3 — Spend to reconcile** | Contacts, bills, annotation output and contractor settlement, AP, bank-file import, read-only bank-feed contract, reconciliation, Action Center | Accepted output → settlement → payable → externally executed payment → imported transaction → reconciliation → cost report works without a spreadsheet |
 | **M4 — Earn to reconcile** | Contracts/projects, invoices, credit notes, AR, receipts, aging, project margin | Client job → invoice → receipt → reconciliation → margin handles partial payment and cancellation safely |
 | **M5 — Close and report** | Month-end checklist, three statements, reconciliation report, drill-down, fixed assets, export | Every balance traces to evidence; a closed month reproduces after restore |
 | **M6 — SG/CN scale** | SGD/CNY, effective-dated FX, multi-entity isolation, intercompany and consolidation | Historical reports remain stable; entity isolation and consolidation invariants pass |
 | **M7 — Basic completion** | Personal capture, budgets, credit cards, transfers, net worth, spending analysis | Transfers never become spending; personal and business books remain isolated |
 | **M8 — Production RC** | Encryption, supply-chain checks, full test matrix, diagnostics, signed installers, upgrade/rollback | All production gates pass plus one full parallel shadow-book close |
-| **M9 — Optional intelligence** | Rules, forecasts, local AI, tax RAG, selected integrations | Disabling AI changes no accounting result; AI cannot mutate books without approval |
+| **M9 — Optional intelligence** | Rules, forecasts, local AI, tax RAG, and selected read-only integrations | Disabling AI or a provider changes no accounting result; no integration can initiate a payment |
 
 The detailed deliverables, finance lessons, acceptance gates, version labels, and safe adoption process are maintained in [docs/product-roadmap.md](docs/product-roadmap.md).
 
@@ -487,9 +502,9 @@ This project is a **teaching project**: the author writes all implementation cod
 
 ## Project Conventions
 
-This repository follows a **teaching-mode** workflow:
+This repository follows a **bilingual teaching-mode** workflow:
 
-- **All documentation is written in English.**
+- **Reader-facing documentation is maintained in paired English and Simplified Chinese editions.** English is the canonical technical wording when the two differ; every major document links to its counterpart.
 - **All code comments are written in English.**
 - **Teaching and discussion happen bilingually (Chinese + English).**
 - **The author writes all the code personally** — this repo is a learning vehicle, not a code-generation target. Assistance is for guidance, review, and explanation, not for writing the implementation.
@@ -519,6 +534,7 @@ FinLedgerPro/
 │   │   ├── statements/      #   P&L, Balance Sheet, Cash Flow + Excel/PDF export
 │   │   └── tax_rag/         #   ChromaDB + RAG tax-knowledge lookup
 │   ├── ai/                  # LangChain / LangGraph workflow + Ollama (both tiers)
+│   ├── integrations/        # Replaceable FX and read-only bank-feed contracts
 │   └── db/                  # SQLite schema, migrations, data access
 ├── data/                    # Local SQLite file, FX cache, tax PDFs (gitignored)
 ├── docs/                    # English architecture, roadmap, research, and runbooks
@@ -528,6 +544,8 @@ FinLedgerPro/
 ```
 
 **Dependency rule:** `personal/` and `pro/` may both depend on `core/`; **neither may depend on the other**. This keeps Basic fully functional with Pro absent, and keeps the tier boundary from eroding over time.
+
+Company-specific software lives in a separate private repository and consumes a tagged release of this public core. It may add company branding, account mappings, invoice layouts, internal workflows, and read-only providers such as Aspire, but it must not copy credentials or financial data into Git. The public core never depends on private company code. The complete boundary and upgrade rules are in [Public Core and Private Company Repositories](docs/public-core-and-private-company-repos.md).
 
 ---
 
@@ -618,7 +636,7 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 | **Correctness** | `TRANSFER` excluded from spending totals | ☐ |
 | **Correctness** | Balanced-entry validation (Pro) | ☐ |
 | **Correctness** | Property tests for accounting invariants | ☐ |
-| **Correctness** | Idempotent posting, payment, settlement, and import commands | ☐ |
+| **Correctness** | Idempotent posting, payment-recording, settlement, and import commands | ☐ |
 | **Workflow** | Draft → approve → post → reverse state controls | ☐ |
 | **Workflow** | Source document → journal → report drill-down | ☐ |
 | **Workflow** | Bank import staging, duplicate detection, and reconciliation evidence | ☐ |
@@ -633,6 +651,11 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 | **Reliability** | Automatic backups + one-click restore | ☐ |
 | **Reliability** | Automated restore verification | ☐ |
 | **Reliability** | Startup integrity + balance check | ☐ |
+| **Integration** | Manual/offline path for every optional API | ☐ |
+| **Integration** | Provider contract tests, timeout/retry limits, cache provenance, and stale-data warning | ☐ |
+| **Integration** | Read-only bank-feed contract; no transfer, payout, beneficiary, card, or collection methods | ☐ |
+| **Currency** | ISO 4217 model + SGD/CNY acceptance tests | ☐ |
+| **Currency** | Per-transaction rate snapshot + realized/unrealized FX tests | ☐ |
 | **Release** | CI runs tests/lint/types on every change | ☐ |
 | **Release** | Auto-update for the desktop app | ☐ |
 | **Release** | SemVer + maintained changelog | ☐ |
@@ -649,6 +672,8 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 - ✅ Positioning restructured into two free tiers: **Basic (personal)** and **Pro (business)**.
 - ✅ Scope, architecture, and tier boundary defined (this document + [docs/architecture.md](docs/architecture.md)).
 - ✅ Xero studied as a workflow/control benchmark; adoption and non-copy decisions documented.
+- ✅ Full open-source / no-commercialisation intent and Xero non-affiliation documented.
+- ✅ Open-API and multi-currency provider strategy defined; SGD/CNY remain the first acceptance target.
 - ✅ Tech stack chosen (Electron + React/Tailwind + FastAPI + Ollama/LangGraph + SQLite + ChromaDB).
 - ✅ Licensed under **MIT** — everything free and open source, no paid tier.
 - ✅ Engineering standards and financial-correctness rules agreed.
@@ -668,11 +693,14 @@ This is a **teaching project**: the author writes all code personally (see [Proj
 
 | Document | What it covers |
 |----------|----------------|
-| [README](README.md) | Positioning, the Basic/Pro tiers, features, tech stack, roadmap, engineering standards |
-| [docs/architecture.md](docs/architecture.md) | The narrow-waist architecture ADR — kernel, tier layering, extensibility design points, worked example |
-| [docs/xero-product-benchmark.md](docs/xero-product-benchmark.md) | What Xero is, which workflows and controls to learn from, what not to copy, and how to study it safely |
-| [docs/product-roadmap.md](docs/product-roadmap.md) | Quality-gated milestones, finance lessons, acceptance gates, release labels, and real-book adoption plan |
-| [CHANGELOG.md](CHANGELOG.md) | What has been decided and built, by release |
+| [README](README.md) · [中文](README.zh-CN.md) | Positioning, feature tiers, engineering standards, and project status |
+| [Documentation index](docs/README.md) | Bilingual documentation map and language policy |
+| [Architecture](docs/architecture.md) · [中文](docs/architecture.zh-CN.md) | Narrow-waist architecture, boundaries, and worked example |
+| [Xero benchmark](docs/xero-product-benchmark.md) · [中文](docs/xero-product-benchmark.zh-CN.md) | Xero-inspired workflows, adaptation decisions, and non-affiliation |
+| [Product roadmap](docs/product-roadmap.md) · [中文](docs/product-roadmap.zh-CN.md) | Quality-gated milestones, finance lessons, and safe adoption |
+| [Open API & multi-currency](docs/open-api-and-multi-currency.md) · [中文](docs/open-api-and-multi-currency.zh-CN.md) | Provider architecture, currency data contract, fallback, and FX accounting |
+| [Public core & private company repos](docs/public-core-and-private-company-repos.md) · [中文](docs/public-core-and-private-company-repos.zh-CN.md) | Downstream customisation, extension contracts, read-only banking, and secrets boundaries |
+| [CHANGELOG.md](CHANGELOG.md) · [中文](CHANGELOG.zh-CN.md) | What has been decided and built, by release |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to report bugs and give feedback on a teaching project |
 | [LICENSE](LICENSE) | MIT |
 
@@ -692,11 +720,14 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fo
 
 MIT is a short, permissive license: anyone may use, copy, modify, merge, publish, distribute, sublicense, and sell the software — including in closed-source and commercial products — as long as they keep the original copyright and license notice. The software is provided "as is", without warranty.
 
-**Both tiers are covered.** Basic and Pro are published under the same licence, at no cost. There is no proprietary edition and nothing is withheld.
+**Both tiers are covered.** Basic, Pro, and the reference application are published under the same licence, at no cost. The maintainer withholds no proprietary edition. A downstream company may keep its own extension repository private while depending on the public core.
+
+**Project intent:** the maintainer has no plan to commercialise FinLedger Pro. There will be no subscription, paid edition, licence key, advertising, or feature paywall in the public project. The public core and reference application remain open source. The MIT License permits companies to build private or commercial downstream extensions; project intent does not remove rights granted by the licence.
 
 ## Acknowledgements
 
 - Project summary and positioning authored with assistance from Claude (Anthropic), 2026.
+- Product workflow research draws on Xero's publicly available documentation. FinLedger Pro is an independent project and is not affiliated with or endorsed by Xero; no Xero source code or proprietary assets are included.
 
 ---
 

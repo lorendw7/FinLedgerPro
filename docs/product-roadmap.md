@@ -1,10 +1,12 @@
 # FinLedger Pro — Product and Learning Roadmap
 
+[English](product-roadmap.md) | [简体中文](product-roadmap.zh-CN.md)
+
 > **Status:** Active plan
 >
 > **Planning model:** Quality-gated milestones, not a calendar promise
 >
-> **Owner:** The author writes all application code personally. Teaching and discussion are bilingual; repository documentation and code comments are English.
+> **Owner:** The author writes all application code personally. Teaching and discussion are bilingual; major documents have paired English/Chinese editions; code comments are English.
 
 ---
 
@@ -13,9 +15,10 @@
 1. **Real books before broad features.** The first business release must support one complete, reconcilable workflow used by the owner's company.
 2. **Trust before automation.** Auditability, reversal, backup, and reconciliation arrive before AI posting or convenience integrations.
 3. **Release gates, not week numbers.** A milestone is complete only when its acceptance and recovery tests pass.
-4. **Source documents drive accounting.** Bills, invoices, settlements, receipts, and payments generate journal entries through posting rules.
+4. **Source documents drive accounting.** Bills, invoices, settlements, receipts, and externally evidenced payment records generate journal entries through posting rules.
 5. **Manual review remains authoritative.** Rules and AI may suggest; the owner approves financial mutations.
 6. **Accounting learning accompanies implementation.** Each milestone begins with the relevant finance lesson and ends with a bookkeeping exercise using fabricated data.
+7. **Multi-currency starts in the model; integrations start offline.** Currency and rate provenance exist from M1, full FX accounting arrives in M6, and every external provider remains replaceable.
 
 The earlier seven-week outline is retired. It was useful for sequencing topics but is not a safe promise for a production accounting release developed by one person.
 
@@ -31,8 +34,10 @@ The earlier seven-week outline is retired. It was useful for sequencing topics b
 
 - Product positioning, Basic / Pro boundaries, and local-first constraints.
 - Narrow-waist architecture and Xero product benchmark.
+- Open-API and multi-currency provider strategy.
+- Public-core/private-company repository boundary and read-only banking scope.
 - Financial-correctness rules and production release gates.
-- MIT licence, contribution policy, and changelog.
+- MIT licence, no-commercialisation intent, bilingual documentation policy, contribution policy, and changelog.
 
 **Exit gate:** the documents agree on scope, terminology, build order, and non-goals.
 
@@ -44,7 +49,7 @@ The earlier seven-week outline is retired. It was useful for sequencing topics b
 
 - Electron, React, FastAPI, and SQLite walking skeleton.
 - Separate `PERSONAL` and `BUSINESS` books.
-- `Decimal` money, currency metadata, dates, time zones, and identifiers.
+- `Decimal` money, ISO 4217 currency metadata, functional currency, dates, time zones, and identifiers.
 - Versioned database migrations.
 - Append-only audit events and structured local logs without financial values.
 - Automatic rotating backups, restore flow, and startup integrity check.
@@ -76,11 +81,11 @@ The earlier seven-week outline is retired. It was useful for sequencing topics b
 - Contacts with customer, supplier, and contractor roles.
 - Bills, direct expenses, attachments, due dates, AP aging, and payment status.
 - Data-annotation projects, output records, QA acceptance, versioned piece rates, contractor settlements, and project cost allocation.
-- Bank accounts and CSV / OFX / QIF statement import into a staging area.
+- Bank accounts, CSV / OFX / QIF statement import, and a read-only `BankFeedProvider` contract for company extensions.
 - Import fingerprinting, duplicate detection, manual matching, split transactions, transfers, and reconciliation summary.
 - Action Center for unreconciled lines, bills due, settlements pending, and backup health.
 
-**Exit gate:** the real workflow “accepted output → settlement → payable → payment → reconciliation → cost report” completes without a spreadsheet; duplicate import and duplicate settlement tests pass.
+**Exit gate:** the real workflow “accepted output → settlement → payable → payment executed externally → transaction imported → reconciliation → cost report” completes without a spreadsheet; duplicate import and duplicate settlement tests pass. No banking interface can initiate money movement.
 
 ### M4 — Earn-to-Reconcile
 
@@ -116,7 +121,9 @@ The earlier seven-week outline is retired. It was useful for sequencing topics b
 
 **Deliver:**
 
-- SGD and CNY transactions with per-transaction FX-rate snapshots and provenance.
+- SGD and CNY as the first fully tested currencies, with USD and EUR as the next extension tests.
+- Replaceable Frankfurter / ECB / manual provider adapters, local caching, and offline fallback.
+- Per-transaction FX-rate snapshots and provenance.
 - Explicit rounding policy and realized / unrealized FX treatment.
 - Entity-isolated books for Singapore and China.
 - Intercompany accounts, elimination entries, and consolidated reporting.
@@ -161,9 +168,9 @@ The earlier seven-week outline is retired. It was useful for sequencing topics b
 - Rule suggestions, anomaly detection, and cash-flow forecasts.
 - Local Ollama / LangGraph analysis with evidence links and confidence labels.
 - Tax-knowledge RAG with source dates, jurisdiction, and citations; no filing.
-- Optional exchange-rate refresh and, only if justified, selected external integrations.
+- Optional exchange-rate refresh and selected read-only integrations; bank providers remain limited to accounts, balances, and transactions.
 
-**Exit gate:** disabling AI changes no accounting result; hallucinated or unavailable AI output cannot post, delete, reconcile, or lock records.
+**Exit gate:** disabling AI or a provider changes no accounting result; hallucinated or unavailable AI output cannot post, delete, reconcile, or lock records; no integration exposes payment, payout, beneficiary, card, refund, or collection commands.
 
 ---
 
@@ -201,7 +208,9 @@ Do not switch directly from the current bookkeeping method to an unproven build.
 
 ## 5. Scope Beyond Version 1.0
 
-Possible later modules include purchase orders, inventory, employee payroll, expense claims, budgets and forecasts, approval workflows, accountant access, bank feeds, and selected payment integrations. They should be added only when a real operating need exists and through the same source-document, posting, reconciliation, and audit contracts.
+Possible later modules include purchase orders, inventory, employee payroll, expense claims, budgets and forecasts, approval workflows, accountant access, and additional read-only bank feeds. They should be added only when a real operating need exists and through the same source-document, posting, reconciliation, and audit contracts.
+
+Payment initiation, payout execution, beneficiary management, direct debit, online collection, refunds, and card issuance/control are intentionally outside the product roadmap. FinLedger Pro records the accounting result of externally executed money movement and reconciles it to imported bank facts.
 
 “Support a small company” means supporting its **core financial operating cycle reliably**. It does not mean replacing HR, CRM, legal case management, tax filing, banking, or a full ERP in version 1.0.
 
@@ -212,3 +221,5 @@ Possible later modules include purchase orders, inventory, employee payroll, exp
 - [README](../README.md) — product positioning and concise project overview.
 - [System Architecture](architecture.md) — narrow-waist design and module boundaries.
 - [Xero Product Benchmark](xero-product-benchmark.md) — product lessons, adaptation decisions, and reliability requirements.
+- [Open API and Multi-Currency Strategy](open-api-and-multi-currency.md) — provider boundaries, currency contract, fallback, and FX accounting.
+- [Public Core and Private Company Repositories](public-core-and-private-company-repos.md) — downstream customisation, extension contracts, and read-only banking scope.

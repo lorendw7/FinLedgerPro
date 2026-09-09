@@ -1,5 +1,7 @@
 # Xero Product Benchmark — What FinLedger Pro Should Learn
 
+[English](xero-product-benchmark.md) | [简体中文](xero-product-benchmark.zh-CN.md)
+
 > **Status:** Product research and design guidance
 >
 > **Reviewed:** 2026-09-06
@@ -13,7 +15,7 @@
 Xero is a cloud accounting platform for small and medium-sized businesses. Its value is not a single accounting feature; it is the way routine work connects into one operating loop:
 
 ```text
-contacts → invoices / bills → payments → bank reconciliation → reports
+contacts → invoices / bills → receipt and payment records → bank reconciliation → reports
 ```
 
 Its public product material emphasizes invoicing, bill management, expenses, bank reconciliation, projects, payroll, cash-flow visibility, and financial reporting in one system. The important lesson for FinLedger Pro is therefore **workflow completeness**: the user should not need a spreadsheet between receiving a source document and seeing the result in the accounts.
@@ -31,7 +33,7 @@ Official references:
 
 Xero puts bank reconciliation near the center of the product. It presents the bank-statement line and the accounting-side candidate together, supports matching and categorisation, exposes unreconciled items, and provides a reconciliation summary. This turns reconciliation from a year-end cleanup into a short routine.
 
-FinLedger Pro should adopt the workflow, initially with local CSV / OFX / QIF import rather than live bank feeds:
+FinLedger Pro should adopt the workflow with local CSV / OFX / QIF import and a read-only bank-feed contract for company extensions:
 
 1. Import into a staging area.
 2. Detect duplicate statement lines before they enter the book.
@@ -96,7 +98,7 @@ References:
 
 Useful automation includes recurring invoices and bills, saved bank rules, smart defaults, bulk actions, duplicate detection, and reminders. AI suggestions must expose the evidence behind a recommendation and must never post financial entries autonomously in the first production release.
 
-For write operations, FinLedger Pro should use idempotency keys so retrying a request cannot create a duplicate invoice, settlement, payment, or journal entry. Xero's developer guidance uses the same principle to make mutation retries safe.
+For internal accounting writes, FinLedger Pro should use idempotency keys so retrying a request cannot create a duplicate invoice, settlement, payment record, or journal entry. This does not authorize a bank payment; it only makes ledger mutations safe. Xero's developer guidance uses the same principle for mutation retries.
 
 Reference: [Xero idempotent requests](https://developer.xero.com/documentation/guides/idempotent-requests/idempotency/).
 
@@ -107,8 +109,8 @@ Reference: [Xero idempotent requests](https://developer.xero.com/documentation/g
 | Xero capability | FinLedger Pro decision | Reason |
 |---|---|---|
 | Cloud-first storage | **Do not copy** | Local-first ownership and offline use are core product promises. |
-| Live bank feeds | **Defer** | Bank partnerships, credentials, availability, and support create disproportionate risk. Start with statement import. |
-| Online payment collection | **Defer** | Adds payment-provider, fraud, dispute, and compliance scope. Record payments first. |
+| Live bank feeds | **Read-only extension** | Import accounts, balances, and transactions through a replaceable provider; stage and reconcile every line before posting. |
+| Payment initiation or online collection | **Out of scope** | Money movement adds payment-provider, fraud, dispute, credential, and compliance risk. Record externally executed settlements instead. |
 | Multi-user collaboration | **Defer, but keep audit fields** | The initial product is single-user. `created_by` and permission boundaries preserve a later migration path. |
 | Country tax filing | **Out of scope** | FinLedger Pro may calculate and explain, but statutory submission requires separate certification and professional validation. |
 | Large integration marketplace | **Do not build now** | Stable import/export contracts provide enough extensibility for the first production release. |
@@ -127,6 +129,10 @@ FinLedger Pro is not a smaller Xero clone. It combines a mature accounting workf
 - **Data-annotation project costing and piece-rate contractor settlement** as a first-class workflow.
 - **Bilingual teaching and explanations** so the owner learns the accounting behind each operation.
 - **Open source and self-hosted on one desktop**, with no subscription or mandatory account.
+- **No commercialisation plan**—no paid edition, advertising, licence key, or proprietary feature tier.
+- **Private downstream customisation**—companies may keep company-specific repositories private while depending one-way on tagged public-core releases.
+
+FinLedger Pro is not affiliated with, endorsed by, or derived from Xero source code. It uses no Xero code, branding, screenshots, or proprietary assets. “Inspired by Xero” refers only to learning from publicly documented, general accounting workflows and control patterns.
 
 The intended outcome is not “every possible small-business feature.” It is **complete, trustworthy coverage of the company's core financial operations**, plus extension points for later needs.
 

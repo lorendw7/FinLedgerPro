@@ -1,6 +1,6 @@
 <svg viewBox="0 0 900 706" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
   <title>FinLedger Pro narrow-waist architecture with Basic and Pro tiers</title>
-  <desc>The Basic tier personal ledger and the Pro tier business subledger modules both sit above a shared accounting kernel that holds books, chart of accounts, general ledger, double-entry posting and trial balance. The reporting and analysis layer reads from the kernel. Basic and Pro may each depend on the kernel but never on each other. A platform band of cross-cutting capabilities wraps everything. Both tiers are free and MIT licensed.</desc>
+  <desc>The Basic tier personal ledger and the Pro tier business subledger modules both sit above a shared public accounting kernel that holds books, chart of accounts, general ledger, double-entry posting and trial balance. The reporting and analysis layer reads from the kernel. Basic and Pro may each depend on the kernel but never on each other. Company-private repositories may depend on tagged public-core releases. Banking adapters are read-only and cannot initiate payments. Both tiers are free and MIT licensed.</desc>
 
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
@@ -106,7 +106,7 @@
   <text x="450" y="552" text-anchor="middle" font-size="12" font-weight="700" fill="#5F5E5A">PLATFORM (cross-cutting) &#183; &#24179;&#21488;&#27178;&#20999;&#33021;&#21147;</text>
   <rect x="40" y="562" width="820" height="64" rx="8" fill="#D3D1C7" stroke="#B4B2A9" stroke-width="1.5"/>
   <text x="450" y="586" text-anchor="middle" font-size="12" fill="#2C2C2A">Multi-book &amp; multi-entity (personal / SG / CN) &#183; Multi-currency &#183; Tax config (&#20165;&#21442;&#32771;)</text>
-  <text x="450" y="608" text-anchor="middle" font-size="12" fill="#2C2C2A">Backup &amp; restore &#183; Security / encryption &#183; Import/Export &#183; Configurable rates</text>
+  <text x="450" y="608" text-anchor="middle" font-size="12" fill="#2C2C2A">Backup &amp; restore &#183; Security &#183; Import/Export &#183; Read-only bank/FX adapters</text>
 
   <!-- legend -->
   <rect x="150" y="652" width="16" height="16" rx="3" fill="#EAF3DE" stroke="#639922" stroke-width="2"/>
