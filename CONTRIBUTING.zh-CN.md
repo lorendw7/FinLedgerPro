@@ -4,6 +4,8 @@
 
 FinLedger Pro 是一个教学型项目。作者通过亲自实现每一个模块学习软件工程、财务和会计，因此所有应用代码都由作者本人编写。
 
+所有被接受的贡献都按照仓库的 MIT 许可证发布，不要求贡献者转让版权。详见[永久开源与免费承诺](OPEN_SOURCE_COMMITMENT.zh-CN.md)。
+
 ## 欢迎的贡献
 
 | 贡献类型 | 是否欢迎 |
@@ -22,6 +24,7 @@ FinLedger Pro 是一个教学型项目。作者通过亲自实现每一个模块
 
 ## 文档规范
 
+- 按照[开发环境配置](docs/development-setup.zh-CN.md)使用仓库锁定的工具链和本地环境。
 - 主要文档成对维护英文和简体中文版本。
 - 如果两个版本暂时不一致，以英文技术表述为准。
 - 修改含义时应在同一次提交中更新两种语言。
@@ -39,4 +42,5 @@ FinLedger Pro 是一个教学型项目。作者通过亲自实现每一个模块
 - [中文 Xero 功能借鉴](docs/xero-product-benchmark.zh-CN.md)
 - [中文开放 API 与多币种策略](docs/open-api-and-multi-currency.zh-CN.md)
 - [公开核心与公司私有仓库](docs/public-core-and-private-company-repos.zh-CN.md)
+- [永久开源与免费承诺](OPEN_SOURCE_COMMITMENT.zh-CN.md)
 - [中文变更日志](CHANGELOG.zh-CN.md)

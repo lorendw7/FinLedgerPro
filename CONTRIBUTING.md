@@ -5,6 +5,8 @@
 Thank you for your interest. Please read this page first — this repository has an
 unusual workflow, and knowing it up front will save you time.
 
+All accepted contributions are distributed under the repository's MIT License without copyright assignment. See the [Open-Source and Free-Forever Commitment](OPEN_SOURCE_COMMITMENT.md).
+
 ---
 
 ## This is a teaching project
@@ -77,6 +79,7 @@ so a fix can be prepared before disclosure.
 If you contribute documentation, please follow the conventions the repository
 already uses:
 
+- Set up the pinned toolchain and local environment using the [development setup guide](docs/development-setup.md).
 - Major reader-facing documents are maintained as paired English and Simplified Chinese files. Update both editions when changing meaning; English is the canonical technical wording if they temporarily differ.
 - **All code comments are written in English.**
 - Discussion and reader-facing documents may be bilingual; code comments and
@@ -98,4 +101,5 @@ already uses:
 - [docs/architecture.md](docs/architecture.md) · [中文](docs/architecture.zh-CN.md) — the narrow-waist architecture and why the system is shaped this way.
 - [Open API & multi-currency](docs/open-api-and-multi-currency.md) · [中文](docs/open-api-and-multi-currency.zh-CN.md) — provider and FX design.
 - [Public core & private company repositories](docs/public-core-and-private-company-repos.md) · [中文](docs/public-core-and-private-company-repos.zh-CN.md) — downstream and banking boundaries.
+- [Open-source commitment](OPEN_SOURCE_COMMITMENT.md) · [中文](OPEN_SOURCE_COMMITMENT.zh-CN.md) — permanent upstream governance policy.
 - [CHANGELOG.md](CHANGELOG.md) — what has been decided and built so far.

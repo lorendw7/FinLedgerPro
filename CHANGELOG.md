@@ -15,6 +15,11 @@ Design and documentation phase. No application code has been written yet —
 the repository currently holds the project definition, architecture, and licence.
 
 ### Added
+- Reproducible development baseline for the installed toolchain: Node 24.14,
+  pnpm 11.9, CPython 3.13, uv, workspace metadata, safe environment template,
+  line-ending/editor rules, and generated JavaScript and Python lockfiles.
+- Paired development setup guides covering frozen installs, the uv-managed
+  virtual environment, deferred optional tools, and secrets handling.
 - Project README defining positioning, scope, technical architecture, and
   production-grade engineering standards.
 - Two free feature tiers: **Basic** (personal bookkeeping) and
@@ -37,6 +42,9 @@ the repository currently holds the project definition, architecture, and licence
 - `docs/public-core-and-private-company-repos.md` and its Chinese edition —
   one-way dependency from company-private repositories to tagged public-core
   releases, extension contracts, read-only banking, and secrets boundaries.
+- `OPEN_SOURCE_COMMITMENT.md` and its Chinese edition — permanent upstream
+  policy covering public visibility, MIT licensing, zero licence fees, local
+  usability, contribution licensing, and the ban on a proprietary paid tier.
 - Personal ledger design: `PERSONAL` / `BUSINESS` book separation (entity
   assumption), three transaction kinds with `TRANSFER` excluded from spending,
   credit cards as liability accounts, budgets, need-vs-want tagging, and

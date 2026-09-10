@@ -34,6 +34,8 @@ FinLedger Pro 是一款本地桌面财务应用，包含两个完全免费的功
 - 不把高级功能留在闭源版本；
 - 不默认收集遥测或财务数据。
 
+项目的长期上游规则记录在[永久开源与免费承诺](OPEN_SOURCE_COMMITMENT.zh-CN.md)中：仓库保持公开、官方版本继续使用 MIT、本地会计功能永久免费，也不会把公开功能转移到 FinLedger Pro 闭源版。
+
 公开仓库发布完整可用的会计核心和参考应用。下游公司可以把公司特有扩展保留在自己的私有仓库中，这不等于 FinLedger Pro 维护者经营“开源基础版 + 闭源收费版”。推荐关系是**公司私有仓库 → 公开核心正式版本**，而不是长期维护私有 fork。
 
 MIT 是宽松开源许可证，允许其他人商业使用、修改和分发代码，只要遵守原始版权及许可证声明要求。“项目不商业化”是维护者的产品承诺，不会取消 MIT 已授予第三方的权利。详细边界见[公开核心与公司私有仓库](docs/public-core-and-private-company-repos.zh-CN.md)。
@@ -195,17 +197,19 @@ FinLedger Pro 与 Xero 没有隶属、合作或授权关系，不使用 Xero 的
 | 文档 | English | 中文 |
 |---|---|---|
 | 项目概览 | [README](README.md) | [中文 README](README.zh-CN.md) |
+| 开发环境配置 | [Development setup](docs/development-setup.md) | [环境配置中文](docs/development-setup.zh-CN.md) |
 | 系统架构 | [Architecture](docs/architecture.md) | [架构中文](docs/architecture.zh-CN.md) |
 | 产品路线图 | [Roadmap](docs/product-roadmap.md) | [路线图中文](docs/product-roadmap.zh-CN.md) |
 | Xero 功能借鉴 | [Benchmark](docs/xero-product-benchmark.md) | [借鉴中文](docs/xero-product-benchmark.zh-CN.md) |
 | 开放 API 与多币种 | [Open API](docs/open-api-and-multi-currency.md) | [策略中文](docs/open-api-and-multi-currency.zh-CN.md) |
 | 公开核心与公司私有仓库 | [Repository boundary](docs/public-core-and-private-company-repos.md) | [仓库边界中文](docs/public-core-and-private-company-repos.zh-CN.md) |
+| 永久开源与免费承诺 | [Open-source commitment](OPEN_SOURCE_COMMITMENT.md) | [承诺中文](OPEN_SOURCE_COMMITMENT.zh-CN.md) |
 
 ---
 
 ## 许可证
 
-项目使用 [MIT License](LICENSE)。软件按原样提供，不附带任何担保。许可证保留原始英文法律文本。
+项目使用 [MIT License](LICENSE)。软件按原样提供，不附带任何担保。许可证保留原始英文法律文本；长期治理原则见[永久开源与免费承诺](OPEN_SOURCE_COMMITMENT.zh-CN.md)。
 
 ---
 

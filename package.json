@@ -1,0 +1,12 @@
+{
+  "name": "finledger-pro",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Free, open-source, local-first accounting core and reference app.",
+  "license": "MIT",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24.14.0 <25",
+    "pnpm": ">=11.9.0 <12"
+  }
+}

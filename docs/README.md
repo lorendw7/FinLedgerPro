@@ -7,11 +7,13 @@ All major reader-facing documents are available in English and Simplified Chines
 | Topic / 主题 | English | 简体中文 |
 |---|---|---|
 | Project overview / 项目概览 | [README](../README.md) | [中文 README](../README.zh-CN.md) |
+| Development setup / 开发环境配置 | [Development setup](development-setup.md) | [环境配置中文](development-setup.zh-CN.md) |
 | Architecture / 系统架构 | [Architecture](architecture.md) | [架构中文](architecture.zh-CN.md) |
 | Product roadmap / 产品路线图 | [Roadmap](product-roadmap.md) | [路线图中文](product-roadmap.zh-CN.md) |
 | Xero benchmark / Xero 功能借鉴 | [Xero benchmark](xero-product-benchmark.md) | [Xero 借鉴中文](xero-product-benchmark.zh-CN.md) |
 | Open APIs and currencies / 开放 API 与多币种 | [Open API & multi-currency](open-api-and-multi-currency.md) | [开放 API 与多币种中文](open-api-and-multi-currency.zh-CN.md) |
 | Public core and private company repositories / 公开核心与公司私有仓库 | [Repository boundary](public-core-and-private-company-repos.md) | [仓库边界中文](public-core-and-private-company-repos.zh-CN.md) |
+| Open-source commitment / 永久开源与免费承诺 | [Open-source commitment](../OPEN_SOURCE_COMMITMENT.md) | [承诺中文](../OPEN_SOURCE_COMMITMENT.zh-CN.md) |
 | Contribution guide / 贡献指南 | [Contributing](../CONTRIBUTING.md) | [贡献指南中文](../CONTRIBUTING.zh-CN.md) |
 | Changelog / 变更日志 | [Changelog](../CHANGELOG.md) | [变更日志中文](../CHANGELOG.zh-CN.md) |
 

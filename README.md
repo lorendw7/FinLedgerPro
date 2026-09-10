@@ -117,6 +117,8 @@ The boundary therefore exists for **progressive disclosure**, not monetisation. 
 
 The maintainer has no plan to commercialise the public project. FinLedger Pro's reusable accounting core and reference application remain public and open source; “Pro” will never become a paid edition.
 
+The project's permanent upstream rules are recorded in the [Open-Source and Free-Forever Commitment](OPEN_SOURCE_COMMITMENT.md): the repository remains public, official releases remain MIT-licensed, local accounting features remain free, and no public feature is withheld for a proprietary FinLedger Pro edition.
+
 - The complete source code — Basic *and* Pro — is published under the **[MIT License](LICENSE)**.
 - "Pro" denotes an **advanced feature set**, not a commercial edition. Enabling it is a settings toggle, not a purchase.
 - This is **not** an open-core sales model: the maintainer withholds no proprietary paid tier. Downstream companies may still keep their own company-specific extension repositories private.
@@ -669,6 +671,7 @@ A pragmatic "definition of done". Items are targets for the build, not yet imple
 🚧 **In development — M0 design is complete; M1 implementation has not started.**
 
 **Decided / done**
+- ✅ Development baseline pinned: Node 24.14, pnpm 11.9, CPython 3.13, uv-managed virtual environment, and reproducible lockfiles.
 - ✅ Positioning restructured into two free tiers: **Basic (personal)** and **Pro (business)**.
 - ✅ Scope, architecture, and tier boundary defined (this document + [docs/architecture.md](docs/architecture.md)).
 - ✅ Xero studied as a workflow/control benchmark; adoption and non-copy decisions documented.
@@ -695,11 +698,13 @@ This is a **teaching project**: the author writes all code personally (see [Proj
 |----------|----------------|
 | [README](README.md) · [中文](README.zh-CN.md) | Positioning, feature tiers, engineering standards, and project status |
 | [Documentation index](docs/README.md) | Bilingual documentation map and language policy |
+| [Development setup](docs/development-setup.md) · [中文](docs/development-setup.zh-CN.md) | Pinned tools, local environment creation, lockfiles, and secrets boundary |
 | [Architecture](docs/architecture.md) · [中文](docs/architecture.zh-CN.md) | Narrow-waist architecture, boundaries, and worked example |
 | [Xero benchmark](docs/xero-product-benchmark.md) · [中文](docs/xero-product-benchmark.zh-CN.md) | Xero-inspired workflows, adaptation decisions, and non-affiliation |
 | [Product roadmap](docs/product-roadmap.md) · [中文](docs/product-roadmap.zh-CN.md) | Quality-gated milestones, finance lessons, and safe adoption |
 | [Open API & multi-currency](docs/open-api-and-multi-currency.md) · [中文](docs/open-api-and-multi-currency.zh-CN.md) | Provider architecture, currency data contract, fallback, and FX accounting |
 | [Public core & private company repos](docs/public-core-and-private-company-repos.md) · [中文](docs/public-core-and-private-company-repos.zh-CN.md) | Downstream customisation, extension contracts, read-only banking, and secrets boundaries |
+| [Open-source commitment](OPEN_SOURCE_COMMITMENT.md) · [中文](OPEN_SOURCE_COMMITMENT.zh-CN.md) | Permanent upstream licence, visibility, free-use, and no-paywall policy |
 | [CHANGELOG.md](CHANGELOG.md) · [中文](CHANGELOG.zh-CN.md) | What has been decided and built, by release |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to report bugs and give feedback on a teaching project |
 | [LICENSE](LICENSE) | MIT |
@@ -723,6 +728,8 @@ MIT is a short, permissive license: anyone may use, copy, modify, merge, publish
 **Both tiers are covered.** Basic, Pro, and the reference application are published under the same licence, at no cost. The maintainer withholds no proprietary edition. A downstream company may keep its own extension repository private while depending on the public core.
 
 **Project intent:** the maintainer has no plan to commercialise FinLedger Pro. There will be no subscription, paid edition, licence key, advertising, or feature paywall in the public project. The public core and reference application remain open source. The MIT License permits companies to build private or commercial downstream extensions; project intent does not remove rights granted by the licence.
+
+See the [Open-Source and Free-Forever Commitment](OPEN_SOURCE_COMMITMENT.md) for the repository's non-negotiable upstream governance rules.
 
 ## Acknowledgements
 
